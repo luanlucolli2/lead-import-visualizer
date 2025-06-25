@@ -1,0 +1,101 @@
+
+import { useState } from "react";
+import { Sidebar } from "@/components/Sidebar";
+import { Header } from "@/components/Header";
+import { LeadsTable } from "@/components/LeadsTable";
+import { ImportModal } from "@/components/ImportModal";
+import { useToast } from "@/hooks/use-toast";
+
+// Mock data
+const mockLeads = [
+  { id: "1", cpf: "123.456.789-01", nome: "Ana Silva Santos", telefone: "(11) 99999-1234", classe: "Quente" as const, status: "Elegível" as const, contratos: 3 },
+  { id: "2", cpf: "987.654.321-02", nome: "Carlos Eduardo Lima", telefone: "(21) 98888-5678", classe: "Frio" as const, status: "Inelegível" as const, contratos: 1 },
+  { id: "3", cpf: "456.789.123-03", nome: "Maria Fernanda Costa", telefone: "(11) 97777-9012", classe: "Quente" as const, status: "Elegível" as const, contratos: 5 },
+  { id: "4", cpf: "789.123.456-04", nome: "João Pedro Oliveira", telefone: "(85) 96666-3456", classe: "Frio" as const, status: "Elegível" as const, contratos: 2 },
+  { id: "5", cpf: "321.654.987-05", nome: "Isabela Rodrigues", telefone: "(11) 95555-7890", classe: "Quente" as const, status: "Inelegível" as const, contratos: 1 },
+  { id: "6", cpf: "654.321.987-06", nome: "Rafael Mendes Silva", telefone: "(21) 94444-2345", classe: "Frio" as const, status: "Elegível" as const, contratos: 4 },
+  { id: "7", cpf: "147.258.369-07", nome: "Camila Santos Pereira", telefone: "(11) 93333-6789", classe: "Quente" as const, status: "Elegível" as const, contratos: 3 },
+  { id: "8", cpf: "258.369.147-08", nome: "Gustavo Ferreira", telefone: "(85) 92222-0123", classe: "Frio" as const, status: "Inelegível" as const, contratos: 1 },
+  { id: "9", cpf: "369.147.258-09", nome: "Larissa Almeida", telefone: "(21) 91111-4567", classe: "Quente" as const, status: "Elegível" as const, contratos: 6 },
+  { id: "10", cpf: "159.753.486-10", nome: "Bruno Costa Lima", telefone: "(11) 90000-8901", classe: "Frio" as const, status: "Elegível" as const, contratos: 2 },
+];
+
+const Dashboard = () => {
+  const [searchValue, setSearchValue] = useState("");
+  const [eligibleFilter, setEligibleFilter] = useState(false);
+  const [moreContractsFilter, setMoreContractsFilter] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { toast } = useToast();
+
+  const leadsPerPage = 8;
+
+  // Filter leads based on search and filters
+  const filteredLeads = mockLeads.filter(lead => {
+    const matchesSearch = lead.nome.toLowerCase().includes(searchValue.toLowerCase()) ||
+                         lead.cpf.includes(searchValue) ||
+                         lead.telefone.includes(searchValue);
+    
+    const matchesEligible = !eligibleFilter || lead.status === "Elegível";
+    const matchesContracts = !moreContractsFilter || lead.contratos >= 3;
+
+    return matchesSearch && matchesEligible && matchesContracts;
+  });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredLeads.length / leadsPerPage);
+  const paginatedLeads = filteredLeads.slice(
+    (currentPage - 1) * leadsPerPage,
+    currentPage * leadsPerPage
+  );
+
+  const handleImport = (type: string, file: File) => {
+    console.log(`Importing ${type} from file:`, file.name);
+    toast({
+      title: "Importação iniciada",
+      description: `Processando arquivo ${file.name} para ${type === 'cadastrais' ? 'Dados Cadastrais' : 'Dados de Higienização'}`,
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex">
+      <Sidebar />
+      
+      <div className="flex-1 ml-60">
+        <Header
+          onImportClick={() => setIsImportModalOpen(true)}
+          searchValue={searchValue}
+          onSearchChange={setSearchValue}
+          eligibleFilter={eligibleFilter}
+          onEligibleFilterChange={setEligibleFilter}
+          moreContractsFilter={moreContractsFilter}
+          onMoreContractsFilterChange={setMoreContractsFilter}
+        />
+        
+        <div className="p-6">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Dashboard</h1>
+            <p className="text-gray-600">
+              Gerencie e visualize seus leads importados
+            </p>
+          </div>
+
+          <LeadsTable
+            leads={paginatedLeads}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      </div>
+
+      <ImportModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+        onImport={handleImport}
+      />
+    </div>
+  );
+};
+
+export default Dashboard;
