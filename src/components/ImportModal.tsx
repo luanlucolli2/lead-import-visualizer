@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { X, Upload, AlertCircle } from "lucide-react";
+import { X, Upload, AlertCircle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -45,6 +45,18 @@ export const ImportModal = ({ isOpen, onClose, onImport }: ImportModalProps) => 
     onClose();
     setSelectedFile(null);
     setErrors([]);
+  };
+
+  const handleDownloadTemplate = () => {
+    console.log(`Downloading template for ${importType}`);
+    // Simular download do template
+    const templateName = importType === 'cadastrais' ? 'template_dados_cadastrais.xlsx' : 'template_higienizacao.xlsx';
+    
+    // Criar um link temporário para simular o download
+    const link = document.createElement('a');
+    link.href = '#'; // Em uma implementação real, seria a URL do template
+    link.download = templateName;
+    link.click();
   };
 
   if (!isOpen) return null;
@@ -93,6 +105,29 @@ export const ImportModal = ({ isOpen, onClose, onImport }: ImportModalProps) => 
                 />
                 <span className="text-sm text-gray-700">Dados de Higienização</span>
               </label>
+            </div>
+          </div>
+
+          {/* Template Download */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-medium text-blue-800 mb-1">
+                  Planilha Modelo
+                </h4>
+                <p className="text-xs text-blue-600">
+                  Baixe o template correto para garantir a importação
+                </p>
+              </div>
+              <Button
+                onClick={handleDownloadTemplate}
+                variant="outline"
+                size="sm"
+                className="border-blue-300 text-blue-700 hover:bg-blue-100"
+              >
+                <Download className="w-4 h-4 mr-1" />
+                Baixar
+              </Button>
             </div>
           </div>
 

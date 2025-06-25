@@ -4,6 +4,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { LeadsTable } from "@/components/LeadsTable";
 import { ImportModal } from "@/components/ImportModal";
+import { ExportModal } from "@/components/ExportModal";
 import { useToast } from "@/hooks/use-toast";
 
 // Mock data
@@ -22,9 +23,10 @@ const mockLeads = [
 
 const Dashboard = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [eligibleFilter, setEligibleFilter] = useState(false);
-  const [moreContractsFilter, setMoreContractsFilter] = useState(false);
+  const [eligibleFilter, setEligibleFilter] = useState<"todos" | "elegiveis" | "nao-elegiveis">("todos");
+  const [contractsFilter, setContractsFilter] = useState<"todos" | "mais" | "menos">("todos");
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const { toast } = useToast();
 
@@ -36,8 +38,19 @@ const Dashboard = () => {
                          lead.cpf.includes(searchValue) ||
                          lead.telefone.includes(searchValue);
     
-    const matchesEligible = !eligibleFilter || lead.status === "Elegível";
-    const matchesContracts = !moreContractsFilter || lead.contratos >= 3;
+    let matchesEligible = true;
+    if (eligibleFilter === "elegiveis") {
+      matchesEligible = lead.status === "Elegível";
+    } else if (eligibleFilter === "nao-elegiveis") {
+      matchesEligible = lead.status === "Inelegível";
+    }
+
+    let matchesContracts = true;
+    if (contractsFilter === "mais") {
+      matchesContracts = lead.contratos >= 3;
+    } else if (contractsFilter === "menos") {
+      matchesContracts = lead.contratos < 3;
+    }
 
     return matchesSearch && matchesEligible && matchesContracts;
   });
@@ -57,6 +70,14 @@ const Dashboard = () => {
     });
   };
 
+  const handleExport = (columns: string[]) => {
+    console.log("Exporting columns:", columns);
+    toast({
+      title: "Exportação iniciada",
+      description: `Gerando arquivo Excel com ${columns.length} colunas selecionadas`,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       <Sidebar />
@@ -64,12 +85,13 @@ const Dashboard = () => {
       <div className="flex-1 ml-60">
         <Header
           onImportClick={() => setIsImportModalOpen(true)}
+          onExportClick={() => setIsExportModalOpen(true)}
           searchValue={searchValue}
           onSearchChange={setSearchValue}
           eligibleFilter={eligibleFilter}
           onEligibleFilterChange={setEligibleFilter}
-          moreContractsFilter={moreContractsFilter}
-          onMoreContractsFilterChange={setMoreContractsFilter}
+          contractsFilter={contractsFilter}
+          onContractsFilterChange={setContractsFilter}
         />
         
         <div className="p-6">
@@ -93,6 +115,12 @@ const Dashboard = () => {
         isOpen={isImportModalOpen}
         onClose={() => setIsImportModalOpen(false)}
         onImport={handleImport}
+      />
+
+      <ExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        onExport={handleExport}
       />
     </div>
   );
