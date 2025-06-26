@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
@@ -144,19 +145,55 @@ const Dashboard = () => {
   const [searchValue, setSearchValue] = useState("");
   const [eligibleFilter, setEligibleFilter] = useState<"todos" | "elegiveis" | "nao-elegiveis">("todos");
   const [contractsFilter, setContractsFilter] = useState<"todos" | "mais" | "menos">("todos");
+  const [motivosFilter, setMotivosFilter] = useState<string[]>([]);
+  const [cpfMassFilter, setCpfMassFilter] = useState("");
+  const [appliedCpfList, setAppliedCpfList] = useState<string[]>([]);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { toast } = useToast();
 
   const leadsPerPage = 8;
 
-  // Filter leads based on search and filters
+  // Get unique motivos for the filter
+  const availableMotivos = Array.from(new Set(mockLeads.map(lead => lead.motivo))).sort();
+
+  // Parse CPF list from textarea
+  const parseCpfList = (text: string): string[] => {
+    return text
+      .split(/[,;\n\r]+/)
+      .map(cpf => cpf.trim().replace(/[^\d]/g, ''))
+      .filter(cpf => cpf.length >= 11)
+      .map(cpf => cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'));
+  };
+
+  const handleApplyCpfMassFilter = () => {
+    if (cpfMassFilter.trim()) {
+      const cpfList = parseCpfList(cpfMassFilter);
+      setAppliedCpfList(cpfList);
+      toast({
+        title: "Filtro aplicado",
+        description: `Filtrando por ${cpfList.length} CPFs`,
+      });
+    } else {
+      setAppliedCpfList([]);
+      toast({
+        title: "Filtro removido",
+        description: "Exibindo todos os leads",
+      });
+    }
+    setCurrentPage(1);
+  };
+
+  // Filter leads based on all filters
   const filteredLeads = mockLeads.filter(lead => {
+    // Search filter
     const matchesSearch = lead.nome.toLowerCase().includes(searchValue.toLowerCase()) ||
                          lead.cpf.includes(searchValue) ||
                          lead.telefone.includes(searchValue);
     
+    // Eligibility filter
     let matchesEligible = true;
     if (eligibleFilter === "elegiveis") {
       matchesEligible = lead.status === "Elegível";
@@ -164,6 +201,7 @@ const Dashboard = () => {
       matchesEligible = lead.status === "Inelegível";
     }
 
+    // Contracts filter
     let matchesContracts = true;
     if (contractsFilter === "mais") {
       matchesContracts = lead.contratos >= 3;
@@ -171,7 +209,13 @@ const Dashboard = () => {
       matchesContracts = lead.contratos < 3;
     }
 
-    return matchesSearch && matchesEligible && matchesContracts;
+    // Motivos filter
+    const matchesMotivos = motivosFilter.length === 0 || motivosFilter.includes(lead.motivo);
+
+    // CPF mass filter
+    const matchesCpfMass = appliedCpfList.length === 0 || appliedCpfList.includes(lead.cpf);
+
+    return matchesSearch && matchesEligible && matchesContracts && matchesMotivos && matchesCpfMass;
   });
 
   // Pagination
@@ -198,10 +242,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <Sidebar />
+    <div className="min-h-screen bg-gray-50 flex w-full">
+      <Sidebar 
+        isCollapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+      />
       
-      <div className="flex-1 ml-60">
+      <div className={`flex-1 transition-all duration-300 ${
+        sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60'
+      }`}>
         <Header
           onImportClick={() => setIsImportModalOpen(true)}
           onExportClick={() => setIsExportModalOpen(true)}
@@ -211,13 +260,19 @@ const Dashboard = () => {
           onEligibleFilterChange={setEligibleFilter}
           contractsFilter={contractsFilter}
           onContractsFilterChange={setContractsFilter}
+          motivosFilter={motivosFilter}
+          onMotivosFilterChange={setMotivosFilter}
+          cpfMassFilter={cpfMassFilter}
+          onCpfMassFilterChange={setCpfMassFilter}
+          onApplyCpfMassFilter={handleApplyCpfMassFilter}
+          availableMotivos={availableMotivos}
         />
         
-        <div className="p-6">
+        <div className="p-4 lg:p-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Dashboard</h1>
-            <p className="text-gray-600">
-              Gerencie e visualize seus leads importados
+            <h1 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2">Dashboard</h1>
+            <p className="text-gray-600 text-sm lg:text-base">
+              Gerencie e visualize seus leads importados ({filteredLeads.length} leads encontrados)
             </p>
           </div>
 

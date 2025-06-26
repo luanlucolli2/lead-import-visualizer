@@ -2,7 +2,11 @@
 import { Search, Upload, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 interface HeaderProps {
   onImportClick: () => void;
@@ -13,6 +17,12 @@ interface HeaderProps {
   onEligibleFilterChange: (value: "todos" | "elegiveis" | "nao-elegiveis") => void;
   contractsFilter: "todos" | "mais" | "menos";
   onContractsFilterChange: (value: "todos" | "mais" | "menos") => void;
+  motivosFilter: string[];
+  onMotivosFilterChange: (values: string[]) => void;
+  cpfMassFilter: string;
+  onCpfMassFilterChange: (value: string) => void;
+  onApplyCpfMassFilter: () => void;
+  availableMotivos: string[];
 }
 
 export const Header = ({
@@ -24,110 +34,138 @@ export const Header = ({
   onEligibleFilterChange,
   contractsFilter,
   onContractsFilterChange,
+  motivosFilter,
+  onMotivosFilterChange,
+  cpfMassFilter,
+  onCpfMassFilterChange,
+  onApplyCpfMassFilter,
+  availableMotivos,
 }: HeaderProps) => {
-  const getNextEligibleFilter = () => {
-    switch (eligibleFilter) {
-      case "todos": return "elegiveis";
-      case "elegiveis": return "nao-elegiveis";
-      case "nao-elegiveis": return "todos";
-      default: return "todos";
-    }
-  };
-
-  const getNextContractsFilter = () => {
-    switch (contractsFilter) {
-      case "todos": return "mais";
-      case "mais": return "menos";
-      case "menos": return "todos";
-      default: return "todos";
-    }
-  };
-
-  const getEligibleFilterLabel = () => {
-    switch (eligibleFilter) {
-      case "todos": return "Todos";
-      case "elegiveis": return "Elegíveis";
-      case "nao-elegiveis": return "Não Elegíveis";
-      default: return "Todos";
-    }
-  };
-
-  const getContractsFilterLabel = () => {
-    switch (contractsFilter) {
-      case "todos": return "Todos";
-      case "mais": return "Mais contratos (3+)";
-      case "menos": return "Menos contratos";
-      default: return "Todos";
-    }
-  };
-
-  const getEligibleFilterStyle = () => {
-    switch (eligibleFilter) {
-      case "elegiveis": return "bg-green-100 text-green-800 border-green-300";
-      case "nao-elegiveis": return "bg-red-100 text-red-800 border-red-300";
-      default: return "bg-gray-100 text-gray-600 border-gray-300 hover:bg-gray-200";
-    }
-  };
-
-  const getContractsFilterStyle = () => {
-    switch (contractsFilter) {
-      case "mais": return "bg-blue-100 text-blue-800 border-blue-300";
-      case "menos": return "bg-orange-100 text-orange-800 border-orange-300";
-      default: return "bg-gray-100 text-gray-600 border-gray-300 hover:bg-gray-200";
-    }
-  };
+  const [showCpfFilter, setShowCpfFilter] = useState(false);
 
   return (
-    <div className="bg-white border-b border-gray-200 px-6 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4 flex-1">
+    <div className="bg-white border-b border-gray-200 px-4 lg:px-6 py-4">
+      <div className="space-y-4">
+        {/* First Row - Search, Action Buttons */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           {/* Search Field */}
-          <div className="relative max-w-md">
+          <div className="relative w-full lg:max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
               type="text"
               placeholder="Pesquisar leads..."
               value={searchValue}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10 w-80"
+              className="pl-10 w-full lg:w-80"
             />
           </div>
 
-          {/* Toggle Filters */}
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={() => onEligibleFilterChange(getNextEligibleFilter())}
-              className={cn(
-                "px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 border",
-                getEligibleFilterStyle()
-              )}
+          {/* Action Buttons */}
+          <div className="flex items-center space-x-3 w-full lg:w-auto">
+            <Button 
+              onClick={() => setShowCpfFilter(!showCpfFilter)} 
+              variant="outline" 
+              className="flex-1 lg:flex-none border-gray-300 hover:bg-gray-50"
             >
-              {getEligibleFilterLabel()}
-            </button>
-            
-            <button
-              onClick={() => onContractsFilterChange(getNextContractsFilter())}
-              className={cn(
-                "px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 border",
-                getContractsFilterStyle()
-              )}
+              Filtro CPF
+            </Button>
+            <Button 
+              onClick={onExportClick} 
+              variant="outline" 
+              className="flex-1 lg:flex-none border-gray-300 hover:bg-gray-50"
             >
-              {getContractsFilterLabel()}
-            </button>
+              <Download className="w-4 h-4 mr-2" />
+              Exportar
+            </Button>
+            <Button 
+              onClick={onImportClick} 
+              className="flex-1 lg:flex-none bg-blue-600 hover:bg-blue-700"
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              Importar
+            </Button>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center space-x-3">
-          <Button onClick={onExportClick} variant="outline" className="border-gray-300 hover:bg-gray-50">
-            <Download className="w-4 h-4 mr-2" />
-            Exportar
-          </Button>
-          <Button onClick={onImportClick} className="bg-blue-600 hover:bg-blue-700">
-            <Upload className="w-4 h-4 mr-2" />
-            Importar Leads
-          </Button>
+        {/* Second Row - Filters */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Eligibility Filter */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Elegibilidade</label>
+            <Select value={eligibleFilter} onValueChange={onEligibleFilterChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Selecionar..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">Todos</SelectItem>
+                <SelectItem value="elegiveis">Elegíveis</SelectItem>
+                <SelectItem value="nao-elegiveis">Inelegíveis</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Contracts Filter */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Contratos</label>
+            <Select value={contractsFilter} onValueChange={onContractsFilterChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Selecionar..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">Todos</SelectItem>
+                <SelectItem value="mais">Mais contratos (3+)</SelectItem>
+                <SelectItem value="menos">Menos contratos</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Motivos Filter */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Motivos</label>
+            <MultiSelect
+              options={availableMotivos}
+              selected={motivosFilter}
+              onChange={onMotivosFilterChange}
+              placeholder="Selecionar motivos..."
+              className="w-full"
+            />
+          </div>
         </div>
+
+        {/* CPF Mass Filter (Collapsible) */}
+        {showCpfFilter && (
+          <div className="bg-gray-50 p-4 rounded-lg border">
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-gray-700">
+                Filtro em Massa por CPF
+              </label>
+              <Textarea
+                placeholder="Cole aqui uma lista de CPFs separados por vírgula, ponto-e-vírgula ou quebra de linha..."
+                value={cpfMassFilter}
+                onChange={(e) => onCpfMassFilterChange(e.target.value)}
+                rows={4}
+                className="w-full"
+              />
+              <div className="flex gap-2">
+                <Button 
+                  onClick={onApplyCpfMassFilter}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  Aplicar filtro em massa
+                </Button>
+                <Button 
+                  onClick={() => {
+                    onCpfMassFilterChange("");
+                    onApplyCpfMassFilter();
+                  }}
+                  variant="outline"
+                >
+                  Limpar filtro
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

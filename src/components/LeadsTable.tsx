@@ -50,8 +50,8 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
   return (
     <>
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        {/* Table */}
-        <div className="overflow-x-auto">
+        {/* Desktop Table */}
+        <div className="hidden lg:block overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 sticky top-0">
               <tr>
@@ -146,7 +146,7 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                       className="flex items-center space-x-1"
                     >
                       <Eye className="w-4 h-4" />
-                      <span>Visualizar</span>
+                      <span>Ver</span>
                     </Button>
                   </td>
                 </tr>
@@ -155,8 +155,78 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
           </table>
         </div>
 
+        {/* Mobile/Tablet Cards */}
+        <div className="lg:hidden space-y-4 p-4">
+          {leads.map((lead) => (
+            <div key={lead.id} className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
+              {/* Header */}
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-medium text-gray-900">{lead.nome}</h3>
+                  <p className="text-sm font-mono text-gray-600">{lead.cpf}</p>
+                  <p className="text-sm font-mono text-gray-600">{lead.telefone}</p>
+                </div>
+                <Button
+                  onClick={() => handleViewLead(lead)}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center space-x-1"
+                >
+                  <Eye className="w-4 h-4" />
+                  <span>Ver</span>
+                </Button>
+              </div>
+
+              {/* Status and Class */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <span
+                    className={cn(
+                      "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
+                      lead.classe === "Quente"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-blue-100 text-blue-800"
+                    )}
+                  >
+                    {lead.classe}
+                  </span>
+                  <span
+                    className={cn(
+                      "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
+                      lead.status === "Elegível"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-800"
+                    )}
+                  >
+                    {lead.status}
+                  </span>
+                </div>
+                <span className="text-xs text-gray-500">{lead.contratos} contratos</span>
+              </div>
+
+              {/* Financial Info */}
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-gray-500">Saldo:</span>
+                  <p className="font-semibold">{formatCurrency(lead.saldo)}</p>
+                </div>
+                <div>
+                  <span className="text-gray-500">Libera:</span>
+                  <p className="font-semibold">{formatCurrency(lead.libera)}</p>
+                </div>
+              </div>
+
+              {/* Bottom Info */}
+              <div className="flex justify-between items-center text-xs text-gray-500 pt-2 border-t">
+                <span>Atualizado: {lead.dataAtualizacao}</span>
+                <span>{lead.motivo}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* Pagination */}
-        <div className="bg-white px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+        <div className="bg-white px-4 lg:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
           <div className="text-sm text-gray-500">
             Página {currentPage} de {totalPages}
           </div>
