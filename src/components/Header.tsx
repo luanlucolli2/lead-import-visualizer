@@ -1,12 +1,10 @@
 
-import { Search, Upload, Download } from "lucide-react";
+import { Search, Upload, Download, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { FiltersModal } from "./FiltersModal";
 
 interface HeaderProps {
   onImportClick: () => void;
@@ -21,8 +19,18 @@ interface HeaderProps {
   onMotivosFilterChange: (values: string[]) => void;
   cpfMassFilter: string;
   onCpfMassFilterChange: (value: string) => void;
-  onApplyCpfMassFilter: () => void;
+  namesMassFilter: string;
+  onNamesMassFilterChange: (value: string) => void;
+  phonesMassFilter: string;
+  onPhonesMassFilterChange: (value: string) => void;
+  dateFromFilter: string;
+  onDateFromFilterChange: (value: string) => void;
+  dateToFilter: string;
+  onDateToFilterChange: (value: string) => void;
+  onApplyFilters: () => void;
+  onClearFilters: () => void;
   availableMotivos: string[];
+  hasActiveFilters: boolean;
 }
 
 export const Header = ({
@@ -38,15 +46,25 @@ export const Header = ({
   onMotivosFilterChange,
   cpfMassFilter,
   onCpfMassFilterChange,
-  onApplyCpfMassFilter,
+  namesMassFilter,
+  onNamesMassFilterChange,
+  phonesMassFilter,
+  onPhonesMassFilterChange,
+  dateFromFilter,
+  onDateFromFilterChange,
+  dateToFilter,
+  onDateToFilterChange,
+  onApplyFilters,
+  onClearFilters,
   availableMotivos,
+  hasActiveFilters,
 }: HeaderProps) => {
-  const [showCpfFilter, setShowCpfFilter] = useState(false);
+  const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
 
   return (
     <div className="bg-white border-b border-gray-200 px-4 lg:px-6 py-4">
       <div className="space-y-4">
-        {/* First Row - Search, Action Buttons */}
+        {/* Main Row - Search and Action Buttons */}
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           {/* Search Field */}
           <div className="relative w-full lg:max-w-md">
@@ -63,11 +81,18 @@ export const Header = ({
           {/* Action Buttons */}
           <div className="flex items-center space-x-3 w-full lg:w-auto">
             <Button 
-              onClick={() => setShowCpfFilter(!showCpfFilter)} 
+              onClick={() => setIsFiltersModalOpen(true)} 
               variant="outline" 
-              className="flex-1 lg:flex-none border-gray-300 hover:bg-gray-50"
+              className={cn(
+                "flex-1 lg:flex-none border-gray-300 hover:bg-gray-50 relative",
+                hasActiveFilters && "border-blue-500 bg-blue-50 text-blue-700"
+              )}
             >
-              Filtro CPF
+              <Filter className="w-4 h-4 mr-2" />
+              Filtros
+              {hasActiveFilters && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
+              )}
             </Button>
             <Button 
               onClick={onExportClick} 
@@ -87,86 +112,50 @@ export const Header = ({
           </div>
         </div>
 
-        {/* Second Row - Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Eligibility Filter */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Elegibilidade</label>
-            <Select value={eligibleFilter} onValueChange={onEligibleFilterChange}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Selecionar..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">Todos</SelectItem>
-                <SelectItem value="elegiveis">Elegíveis</SelectItem>
-                <SelectItem value="nao-elegiveis">Inelegíveis</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Contracts Filter */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Contratos</label>
-            <Select value={contractsFilter} onValueChange={onContractsFilterChange}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Selecionar..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">Todos</SelectItem>
-                <SelectItem value="mais">Mais contratos (3+)</SelectItem>
-                <SelectItem value="menos">Menos contratos</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Motivos Filter */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Motivos</label>
-            <MultiSelect
-              options={availableMotivos}
-              selected={motivosFilter}
-              onChange={onMotivosFilterChange}
-              placeholder="Selecionar motivos..."
-              className="w-full"
-            />
-          </div>
-        </div>
-
-        {/* CPF Mass Filter (Collapsible) */}
-        {showCpfFilter && (
-          <div className="bg-gray-50 p-4 rounded-lg border">
-            <div className="space-y-3">
-              <label className="text-sm font-medium text-gray-700">
-                Filtro em Massa por CPF
-              </label>
-              <Textarea
-                placeholder="Cole aqui uma lista de CPFs separados por vírgula, ponto-e-vírgula ou quebra de linha..."
-                value={cpfMassFilter}
-                onChange={(e) => onCpfMassFilterChange(e.target.value)}
-                rows={4}
-                className="w-full"
-              />
-              <div className="flex gap-2">
-                <Button 
-                  onClick={onApplyCpfMassFilter}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  Aplicar filtro em massa
-                </Button>
-                <Button 
-                  onClick={() => {
-                    onCpfMassFilterChange("");
-                    onApplyCpfMassFilter();
-                  }}
-                  variant="outline"
-                >
-                  Limpar filtro
-                </Button>
-              </div>
+        {/* Active Filters Indicator */}
+        {hasActiveFilters && (
+          <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <div className="flex items-center space-x-2">
+              <Filter className="w-4 h-4 text-blue-600" />
+              <span className="text-sm text-blue-800 font-medium">Filtros ativos aplicados</span>
             </div>
+            <Button
+              onClick={onClearFilters}
+              variant="outline"
+              size="sm"
+              className="text-xs border-blue-300 text-blue-700 hover:bg-blue-100"
+            >
+              Limpar todos
+            </Button>
           </div>
         )}
       </div>
+
+      <FiltersModal
+        isOpen={isFiltersModalOpen}
+        onClose={() => setIsFiltersModalOpen(false)}
+        searchValue={searchValue}
+        onSearchChange={onSearchChange}
+        eligibleFilter={eligibleFilter}
+        onEligibleFilterChange={onEligibleFilterChange}
+        contractsFilter={contractsFilter}
+        onContractsFilterChange={onContractsFilterChange}
+        motivosFilter={motivosFilter}
+        onMotivosFilterChange={onMotivosFilterChange}
+        cpfMassFilter={cpfMassFilter}
+        onCpfMassFilterChange={onCpfMassFilterChange}
+        namesMassFilter={namesMassFilter}
+        onNamesMassFilterChange={onNamesMassFilterChange}
+        phonesMassFilter={phonesMassFilter}
+        onPhonesMassFilterChange={onPhonesMassFilterChange}
+        dateFromFilter={dateFromFilter}
+        onDateFromFilterChange={onDateFromFilterChange}
+        dateToFilter={dateToFilter}
+        onDateToFilterChange={onDateToFilterChange}
+        onApplyFilters={onApplyFilters}
+        onClearFilters={onClearFilters}
+        availableMotivos={availableMotivos}
+      />
     </div>
   );
 };

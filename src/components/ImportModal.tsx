@@ -2,18 +2,40 @@
 import { useState } from "react";
 import { X, Upload, AlertCircle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 interface ImportModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onImport: (type: string, file: File) => void;
+  onImport: (type: string, file: File, origin?: string) => void;
 }
+
+const suggestedOrigins = [
+  "Site Corporativo",
+  "Landing Page",
+  "Facebook Ads",
+  "Google Ads",
+  "Instagram",
+  "WhatsApp Business",
+  "Parceiros",
+  "Indicação",
+  "Telemarketing",
+  "Email Marketing",
+  "Eventos",
+  "Feiras"
+];
 
 export const ImportModal = ({ isOpen, onClose, onImport }: ImportModalProps) => {
   const [importType, setImportType] = useState("cadastrais");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [origin, setOrigin] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
+  const [showOriginSuggestions, setShowOriginSuggestions] = useState(false);
+
+  const filteredOrigins = suggestedOrigins.filter(suggestion =>
+    suggestion.toLowerCase().includes(origin.toLowerCase())
+  );
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -32,11 +54,17 @@ export const ImportModal = ({ isOpen, onClose, onImport }: ImportModalProps) => 
     }
   };
 
+  const handleOriginSelect = (selectedOrigin: string) => {
+    setOrigin(selectedOrigin);
+    setShowOriginSuggestions(false);
+  };
+
   const handleImport = () => {
     if (selectedFile) {
-      onImport(importType, selectedFile);
+      onImport(importType, selectedFile, importType === "cadastrais" ? origin : undefined);
       onClose();
       setSelectedFile(null);
+      setOrigin("");
       setErrors([]);
     }
   };
@@ -44,17 +72,17 @@ export const ImportModal = ({ isOpen, onClose, onImport }: ImportModalProps) => 
   const handleClose = () => {
     onClose();
     setSelectedFile(null);
+    setOrigin("");
     setErrors([]);
+    setShowOriginSuggestions(false);
   };
 
   const handleDownloadTemplate = () => {
     console.log(`Downloading template for ${importType}`);
-    // Simular download do template
     const templateName = importType === 'cadastrais' ? 'template_dados_cadastrais.xlsx' : 'template_higienizacao.xlsx';
     
-    // Criar um link temporário para simular o download
     const link = document.createElement('a');
-    link.href = '#'; // Em uma implementação real, seria a URL do template
+    link.href = '#';
     link.download = templateName;
     link.click();
   };
@@ -107,6 +135,39 @@ export const ImportModal = ({ isOpen, onClose, onImport }: ImportModalProps) => 
               </label>
             </div>
           </div>
+
+          {/* Origin Field for Cadastrais */}
+          {importType === "cadastrais" && (
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Origem da Planilha
+              </label>
+              <Input
+                type="text"
+                placeholder="Digite ou selecione a origem..."
+                value={origin}
+                onChange={(e) => {
+                  setOrigin(e.target.value);
+                  setShowOriginSuggestions(true);
+                }}
+                onFocus={() => setShowOriginSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowOriginSuggestions(false), 200)}
+              />
+              {showOriginSuggestions && filteredOrigins.length > 0 && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                  {filteredOrigins.map((suggestion, index) => (
+                    <button
+                      key={index}
+                      className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                      onClick={() => handleOriginSelect(suggestion)}
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Template Download */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -187,7 +248,7 @@ export const ImportModal = ({ isOpen, onClose, onImport }: ImportModalProps) => 
           </Button>
           <Button
             onClick={handleImport}
-            disabled={!selectedFile || errors.length > 0}
+            disabled={!selectedFile || errors.length > 0 || (importType === "cadastrais" && !origin.trim())}
             className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Iniciar Importação

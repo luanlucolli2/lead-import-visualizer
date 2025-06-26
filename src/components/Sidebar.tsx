@@ -32,22 +32,24 @@ export const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
         isCollapsed ? "-translate-x-full lg:translate-x-0 lg:w-16" : "translate-x-0 w-60",
         className
       )}>
-        {/* Hamburger Button */}
-        <div className="p-4 border-b border-gray-600 flex items-center justify-between">
+        {/* Header with Hamburger and Logo */}
+        <div className="p-4 border-b border-gray-600 flex items-center justify-between min-h-[73px]">
           <Button
             variant="ghost"
             size="sm"
             onClick={onToggle}
-            className="text-white hover:bg-gray-700 p-2"
+            className="text-white hover:bg-gray-700 p-2 flex-shrink-0"
           >
             <Menu className="w-5 h-5" />
           </Button>
           {!isCollapsed && (
-            <img
-              src={catarinenselogo}
-              alt="Logo Catarinense"
-              className="h-12 object-contain"
-            />
+            <div className="flex-1 flex justify-center ml-2">
+              <img
+                src={catarinenselogo}
+                alt="Logo Catarinense"
+                className="h-10 object-contain"
+              />
+            </div>
           )}
         </div>
 
@@ -57,15 +59,21 @@ export const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
             <button
               key={item.name}
               className={cn(
-                "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-left transition-colors duration-200",
+                "w-full flex items-center px-3 py-3 rounded-lg text-left transition-colors duration-200",
+                isCollapsed ? "justify-center" : "space-x-3",
                 item.active
                   ? "bg-green-700 text-white"
                   : "text-gray-300 hover:bg-gray-700 hover:text-white"
               )}
               title={isCollapsed ? item.name : undefined}
             >
-              <item.icon className={cn("w-5 h-5 flex-shrink-0", item.active ? "text-white" : "text-gray-400")} />
-              {!isCollapsed && <span className="font-medium">{item.name}</span>}
+              <item.icon className={cn(
+                "w-5 h-5 flex-shrink-0", 
+                item.active ? "text-white" : "text-gray-400"
+              )} />
+              {!isCollapsed && (
+                <span className="font-medium text-sm">{item.name}</span>
+              )}
             </button>
           ))}
         </nav>

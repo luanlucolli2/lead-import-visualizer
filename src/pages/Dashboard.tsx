@@ -147,7 +147,13 @@ const Dashboard = () => {
   const [contractsFilter, setContractsFilter] = useState<"todos" | "mais" | "menos">("todos");
   const [motivosFilter, setMotivosFilter] = useState<string[]>([]);
   const [cpfMassFilter, setCpfMassFilter] = useState("");
+  const [namesMassFilter, setNamesMassFilter] = useState("");
+  const [phonesMassFilter, setPhonesMassFilter] = useState("");
+  const [dateFromFilter, setDateFromFilter] = useState("");
+  const [dateToFilter, setDateToFilter] = useState("");
   const [appliedCpfList, setAppliedCpfList] = useState<string[]>([]);
+  const [appliedNamesList, setAppliedNamesList] = useState<string[]>([]);
+  const [appliedPhonesList, setAppliedPhonesList] = useState<string[]>([]);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -159,32 +165,107 @@ const Dashboard = () => {
   // Get unique motivos for the filter
   const availableMotivos = Array.from(new Set(mockLeads.map(lead => lead.motivo))).sort();
 
-  // Parse CPF list from textarea
-  const parseCpfList = (text: string): string[] => {
+  // Parse text list (CPF, names, phones)
+  const parseTextList = (text: string, type: 'cpf' | 'name' | 'phone'): string[] => {
+    if (!text.trim()) return [];
+    
     return text
       .split(/[,;\n\r]+/)
-      .map(cpf => cpf.trim().replace(/[^\d]/g, ''))
-      .filter(cpf => cpf.length >= 11)
-      .map(cpf => cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'));
+      .map(item => item.trim())
+      .filter(item => item.length > 0)
+      .map(item => {
+        if (type === 'cpf') {
+          // Normalize CPF format
+          const cleanCpf = item.replace(/[^\d]/g, '');
+          if (cleanCpf.length >= 11) {
+            return cleanCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+          }
+          return item;
+        }
+        return item;
+      })
+      .filter(item => item.length > 0);
   };
 
-  const handleApplyCpfMassFilter = () => {
+  // Convert date string to comparable format (YYYY-MM-DD to DD/MM/YYYY comparison)
+  const isDateInRange = (dateStr: string, fromDate: string, toDate: string): boolean => {
+    if (!fromDate && !toDate) return true;
+    
+    // Convert DD/MM/YYYY to YYYY-MM-DD for comparison
+    const [day, month, year] = dateStr.split('/');
+    const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    
+    if (fromDate && formattedDate < fromDate) return false;
+    if (toDate && formattedDate > toDate) return false;
+    
+    return true;
+  };
+
+  const handleApplyFilters = () => {
+    // Apply CPF filter
     if (cpfMassFilter.trim()) {
-      const cpfList = parseCpfList(cpfMassFilter);
+      const cpfList = parseTextList(cpfMassFilter, 'cpf');
       setAppliedCpfList(cpfList);
-      toast({
-        title: "Filtro aplicado",
-        description: `Filtrando por ${cpfList.length} CPFs`,
-      });
     } else {
       setAppliedCpfList([]);
-      toast({
-        title: "Filtro removido",
-        description: "Exibindo todos os leads",
-      });
     }
+
+    // Apply Names filter
+    if (namesMassFilter.trim()) {
+      const namesList = parseTextList(namesMassFilter, 'name');
+      setAppliedNamesList(namesList.map(name => name.toLowerCase()));
+    } else {
+      setAppliedNamesList([]);
+    }
+
+    // Apply Phones filter
+    if (phonesMassFilter.trim()) {
+      const phonesList = parseTextList(phonesMassFilter, 'phone');
+      setAppliedPhonesList(phonesList);
+    } else {
+      setAppliedPhonesList([]);
+    }
+
     setCurrentPage(1);
+    
+    toast({
+      title: "Filtros aplicados",
+      description: "Os filtros foram aplicados com sucesso",
+    });
   };
+
+  const handleClearFilters = () => {
+    setSearchValue("");
+    setEligibleFilter("todos");
+    setContractsFilter("todos");
+    setMotivosFilter([]);
+    setCpfMassFilter("");
+    setNamesMassFilter("");
+    setPhonesMassFilter("");
+    setDateFromFilter("");
+    setDateToFilter("");
+    setAppliedCpfList([]);
+    setAppliedNamesList([]);
+    setAppliedPhonesList([]);
+    setCurrentPage(1);
+    
+    toast({
+      title: "Filtros limpos",
+      description: "Todos os filtros foram removidos",
+    });
+  };
+
+  // Check if any filters are active
+  const hasActiveFilters = 
+    searchValue !== "" ||
+    eligibleFilter !== "todos" ||
+    contractsFilter !== "todos" ||
+    motivosFilter.length > 0 ||
+    appliedCpfList.length > 0 ||
+    appliedNamesList.length > 0 ||
+    appliedPhonesList.length > 0 ||
+    dateFromFilter !== "" ||
+    dateToFilter !== "";
 
   // Filter leads based on all filters
   const filteredLeads = mockLeads.filter(lead => {
@@ -215,7 +296,19 @@ const Dashboard = () => {
     // CPF mass filter
     const matchesCpfMass = appliedCpfList.length === 0 || appliedCpfList.includes(lead.cpf);
 
-    return matchesSearch && matchesEligible && matchesContracts && matchesMotivos && matchesCpfMass;
+    // Names mass filter
+    const matchesNamesMass = appliedNamesList.length === 0 || 
+      appliedNamesList.some(name => lead.nome.toLowerCase().includes(name));
+
+    // Phones mass filter
+    const matchesPhonesMass = appliedPhonesList.length === 0 || 
+      appliedPhonesList.some(phone => lead.telefone.includes(phone.replace(/[^\d]/g, '')));
+
+    // Date range filter
+    const matchesDateRange = isDateInRange(lead.dataAtualizacao, dateFromFilter, dateToFilter);
+
+    return matchesSearch && matchesEligible && matchesContracts && matchesMotivos && 
+           matchesCpfMass && matchesNamesMass && matchesPhonesMass && matchesDateRange;
   });
 
   // Pagination
@@ -225,11 +318,11 @@ const Dashboard = () => {
     currentPage * leadsPerPage
   );
 
-  const handleImport = (type: string, file: File) => {
-    console.log(`Importing ${type} from file:`, file.name);
+  const handleImport = (type: string, file: File, origin?: string) => {
+    console.log(`Importing ${type} from file:`, file.name, origin ? `with origin: ${origin}` : '');
     toast({
       title: "Importação iniciada",
-      description: `Processando arquivo ${file.name} para ${type === 'cadastrais' ? 'Dados Cadastrais' : 'Dados de Higienização'}`,
+      description: `Processando arquivo ${file.name} para ${type === 'cadastrais' ? 'Dados Cadastrais' : 'Dados de Higienização'}${origin ? ` (Origem: ${origin})` : ''}`,
     });
   };
 
@@ -264,8 +357,18 @@ const Dashboard = () => {
           onMotivosFilterChange={setMotivosFilter}
           cpfMassFilter={cpfMassFilter}
           onCpfMassFilterChange={setCpfMassFilter}
-          onApplyCpfMassFilter={handleApplyCpfMassFilter}
+          namesMassFilter={namesMassFilter}
+          onNamesMassFilterChange={setNamesMassFilter}
+          phonesMassFilter={phonesMassFilter}
+          onPhonesMassFilterChange={setPhonesMassFilter}
+          dateFromFilter={dateFromFilter}
+          onDateFromFilterChange={setDateFromFilter}
+          dateToFilter={dateToFilter}
+          onDateToFilterChange={setDateToFilter}
+          onApplyFilters={handleApplyFilters}
+          onClearFilters={handleClearFilters}
           availableMotivos={availableMotivos}
+          hasActiveFilters={hasActiveFilters}
         />
         
         <div className="p-4 lg:p-6">

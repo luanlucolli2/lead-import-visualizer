@@ -16,11 +16,11 @@ const availableColumns = [
   { id: "telefone", label: "Telefone", selected: true },
   { id: "classe", label: "Classe", selected: true },
   { id: "status", label: "Status", selected: true },
-  { id: "contratos", label: "Número de Contratos", selected: true },
-  { id: "email", label: "Email", selected: false },
-  { id: "endereco", label: "Endereço", selected: false },
-  { id: "data_nascimento", label: "Data de Nascimento", selected: false },
-  { id: "renda", label: "Renda", selected: false },
+  { id: "contratos", label: "Contratos", selected: true },
+  { id: "saldo", label: "Saldo", selected: true },
+  { id: "libera", label: "Libera", selected: true },
+  { id: "dataAtualizacao", label: "Data Atualização", selected: true },
+  { id: "motivo", label: "Motivo", selected: true },
 ];
 
 export const ExportModal = ({ isOpen, onClose, onExport }: ExportModalProps) => {
