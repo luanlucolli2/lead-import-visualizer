@@ -17,6 +17,7 @@ interface Lead {
   libera: number;
   dataAtualizacao: string;
   motivo: string;
+  origem: string;
 }
 
 interface LeadsTableProps {
@@ -83,6 +84,9 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                   Contratos
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Origem
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Ações
                 </th>
               </tr>
@@ -137,6 +141,11 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
                     {lead.contratos}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <span className="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">
+                      {lead.origem}
+                    </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Button
@@ -199,6 +208,9 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                     )}
                   >
                     {lead.status}
+                  </span>
+                  <span className="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">
+                    {lead.origem}
                   </span>
                 </div>
                 <span className="text-xs text-gray-500">{lead.contratos} contratos</span>

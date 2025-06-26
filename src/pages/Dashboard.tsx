@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
@@ -7,7 +6,7 @@ import { ImportModal } from "@/components/ImportModal";
 import { ExportModal } from "@/components/ExportModal";
 import { useToast } from "@/hooks/use-toast";
 
-// Mock data com novos campos
+// Mock data com origem e motivos padronizados
 const mockLeads = [
   { 
     id: "1", 
@@ -20,7 +19,8 @@ const mockLeads = [
     saldo: 25000.50,
     libera: 18000.30,
     dataAtualizacao: "15/12/2024",
-    motivo: "Documentação completa"
+    motivo: "Aprovado",
+    origem: "Sistema Interno"
   },
   { 
     id: "2", 
@@ -33,7 +33,8 @@ const mockLeads = [
     saldo: 8500.00,
     libera: 0.00,
     dataAtualizacao: "14/12/2024",
-    motivo: "Pendência documental"
+    motivo: "Não autorizado",
+    origem: "Planilha Excel"
   },
   { 
     id: "3", 
@@ -46,7 +47,8 @@ const mockLeads = [
     saldo: 42000.75,
     libera: 35000.00,
     dataAtualizacao: "16/12/2024",
-    motivo: "Aprovado sistema"
+    motivo: "Aprovado",
+    origem: "API Externa"
   },
   { 
     id: "4", 
@@ -59,7 +61,8 @@ const mockLeads = [
     saldo: 15200.80,
     libera: 12000.00,
     dataAtualizacao: "13/12/2024",
-    motivo: "Análise aprovada"
+    motivo: "Aprovado",
+    origem: "Sistema Interno"
   },
   { 
     id: "5", 
@@ -72,7 +75,8 @@ const mockLeads = [
     saldo: 5000.00,
     libera: 0.00,
     dataAtualizacao: "12/12/2024",
-    motivo: "Restrição CPF"
+    motivo: "Saldo insuficiente",
+    origem: "Planilha Excel"
   },
   { 
     id: "6", 
@@ -85,7 +89,8 @@ const mockLeads = [
     saldo: 31500.25,
     libera: 28000.50,
     dataAtualizacao: "16/12/2024",
-    motivo: "Processamento ok"
+    motivo: "Aprovado",
+    origem: "API Externa"
   },
   { 
     id: "7", 
@@ -98,7 +103,8 @@ const mockLeads = [
     saldo: 22000.40,
     libera: 19500.00,
     dataAtualizacao: "15/12/2024",
-    motivo: "Validação concluída"
+    motivo: "Aprovado",
+    origem: "Sistema Interno"
   },
   { 
     id: "8", 
@@ -111,7 +117,8 @@ const mockLeads = [
     saldo: 3200.00,
     libera: 0.00,
     dataAtualizacao: "11/12/2024",
-    motivo: "Score baixo"
+    motivo: "Não autorizado",
+    origem: "Planilha Excel"
   },
   { 
     id: "9", 
@@ -124,7 +131,8 @@ const mockLeads = [
     saldo: 58000.90,
     libera: 52000.00,
     dataAtualizacao: "17/12/2024",
-    motivo: "Alto potencial"
+    motivo: "Aprovado",
+    origem: "API Externa"
   },
   { 
     id: "10", 
@@ -132,12 +140,13 @@ const mockLeads = [
     nome: "Bruno Costa Lima", 
     telefone: "(11) 90000-8901", 
     classe: "Frio" as const, 
-    status: "Elegível" as const, 
+    status: "Inelegível" as const, 
     contratos: 2,
     saldo: 13800.60,
     libera: 11000.20,
     dataAtualizacao: "14/12/2024",
-    motivo: "Dados conferidos"
+    motivo: "Saldo insuficiente",
+    origem: "Sistema Interno"
   },
 ];
 
@@ -146,6 +155,7 @@ const Dashboard = () => {
   const [eligibleFilter, setEligibleFilter] = useState<"todos" | "elegiveis" | "nao-elegiveis">("todos");
   const [contractsFilter, setContractsFilter] = useState<"todos" | "mais" | "menos">("todos");
   const [motivosFilter, setMotivosFilter] = useState<string[]>([]);
+  const [origemFilter, setOrigemFilter] = useState<string[]>([]);
   const [cpfMassFilter, setCpfMassFilter] = useState("");
   const [namesMassFilter, setNamesMassFilter] = useState("");
   const [phonesMassFilter, setPhonesMassFilter] = useState("");
@@ -162,8 +172,9 @@ const Dashboard = () => {
 
   const leadsPerPage = 8;
 
-  // Get unique motivos for the filter
+  // Get unique motivos and origens for the filters
   const availableMotivos = Array.from(new Set(mockLeads.map(lead => lead.motivo))).sort();
+  const availableOrigens = Array.from(new Set(mockLeads.map(lead => lead.origem))).sort();
 
   // Parse text list (CPF, names, phones)
   const parseTextList = (text: string, type: 'cpf' | 'name' | 'phone'): string[] => {
@@ -239,6 +250,7 @@ const Dashboard = () => {
     setEligibleFilter("todos");
     setContractsFilter("todos");
     setMotivosFilter([]);
+    setOrigemFilter([]);
     setCpfMassFilter("");
     setNamesMassFilter("");
     setPhonesMassFilter("");
@@ -261,6 +273,7 @@ const Dashboard = () => {
     eligibleFilter !== "todos" ||
     contractsFilter !== "todos" ||
     motivosFilter.length > 0 ||
+    origemFilter.length > 0 ||
     appliedCpfList.length > 0 ||
     appliedNamesList.length > 0 ||
     appliedPhonesList.length > 0 ||
@@ -293,6 +306,9 @@ const Dashboard = () => {
     // Motivos filter
     const matchesMotivos = motivosFilter.length === 0 || motivosFilter.includes(lead.motivo);
 
+    // Origem filter
+    const matchesOrigem = origemFilter.length === 0 || origemFilter.includes(lead.origem);
+
     // CPF mass filter
     const matchesCpfMass = appliedCpfList.length === 0 || appliedCpfList.includes(lead.cpf);
 
@@ -308,7 +324,7 @@ const Dashboard = () => {
     const matchesDateRange = isDateInRange(lead.dataAtualizacao, dateFromFilter, dateToFilter);
 
     return matchesSearch && matchesEligible && matchesContracts && matchesMotivos && 
-           matchesCpfMass && matchesNamesMass && matchesPhonesMass && matchesDateRange;
+           matchesOrigem && matchesCpfMass && matchesNamesMass && matchesPhonesMass && matchesDateRange;
   });
 
   // Pagination
@@ -355,6 +371,8 @@ const Dashboard = () => {
           onContractsFilterChange={setContractsFilter}
           motivosFilter={motivosFilter}
           onMotivosFilterChange={setMotivosFilter}
+          origemFilter={origemFilter}
+          onOrigemFilterChange={setOrigemFilter}
           cpfMassFilter={cpfMassFilter}
           onCpfMassFilterChange={setCpfMassFilter}
           namesMassFilter={namesMassFilter}
@@ -368,6 +386,7 @@ const Dashboard = () => {
           onApplyFilters={handleApplyFilters}
           onClearFilters={handleClearFilters}
           availableMotivos={availableMotivos}
+          availableOrigens={availableOrigens}
           hasActiveFilters={hasActiveFilters}
         />
         

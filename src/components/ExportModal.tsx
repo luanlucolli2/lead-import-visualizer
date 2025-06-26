@@ -21,6 +21,7 @@ const availableColumns = [
   { id: "libera", label: "Libera", selected: true },
   { id: "dataAtualizacao", label: "Data Atualização", selected: true },
   { id: "motivo", label: "Motivo", selected: true },
+  { id: "origem", label: "Origem", selected: true },
 ];
 
 export const ExportModal = ({ isOpen, onClose, onExport }: ExportModalProps) => {

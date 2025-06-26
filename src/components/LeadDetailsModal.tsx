@@ -16,6 +16,7 @@ interface Lead {
   libera: number;
   dataAtualizacao: string;
   motivo: string;
+  origem: string;
 }
 
 interface LeadDetailsModalProps {
@@ -41,13 +42,6 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
           <DialogTitle className="text-xl font-semibold text-gray-900">
             Detalhes do Lead
           </DialogTitle>
-          <button
-            onClick={onClose}
-            className="absolute right-4 top-4  opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-          >
-           
-        
-          </button>
         </DialogHeader>
 
         <div className="grid grid-cols-2 gap-6 py-4">
@@ -96,6 +90,13 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
                 </span>
                 <span className="text-xs text-gray-600">• {lead.motivo}</span>
               </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-500">Origem dos Dados</label>
+              <span className="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">
+                {lead.origem}
+              </span>
             </div>
           </div>
 

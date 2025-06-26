@@ -19,6 +19,8 @@ interface FiltersModalProps {
   onContractsFilterChange: (value: "todos" | "mais" | "menos") => void;
   motivosFilter: string[];
   onMotivosFilterChange: (values: string[]) => void;
+  origemFilter: string[];
+  onOrigemFilterChange: (values: string[]) => void;
   cpfMassFilter: string;
   onCpfMassFilterChange: (value: string) => void;
   namesMassFilter: string;
@@ -32,6 +34,7 @@ interface FiltersModalProps {
   onApplyFilters: () => void;
   onClearFilters: () => void;
   availableMotivos: string[];
+  availableOrigens: string[];
 }
 
 export const FiltersModal = ({
@@ -45,6 +48,8 @@ export const FiltersModal = ({
   onContractsFilterChange,
   motivosFilter,
   onMotivosFilterChange,
+  origemFilter,
+  onOrigemFilterChange,
   cpfMassFilter,
   onCpfMassFilterChange,
   namesMassFilter,
@@ -58,6 +63,7 @@ export const FiltersModal = ({
   onApplyFilters,
   onClearFilters,
   availableMotivos,
+  availableOrigens,
 }: FiltersModalProps) => {
   if (!isOpen) return null;
 
@@ -132,6 +138,17 @@ export const FiltersModal = ({
                   selected={motivosFilter}
                   onChange={onMotivosFilterChange}
                   placeholder="Selecionar motivos..."
+                />
+              </div>
+
+              {/* Origem Filter */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Origem dos Dados</label>
+                <MultiSelect
+                  options={availableOrigens}
+                  selected={origemFilter}
+                  onChange={onOrigemFilterChange}
+                  placeholder="Selecionar origens..."
                 />
               </div>
 
