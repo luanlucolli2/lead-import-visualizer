@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
@@ -7,18 +6,138 @@ import { ImportModal } from "@/components/ImportModal";
 import { ExportModal } from "@/components/ExportModal";
 import { useToast } from "@/hooks/use-toast";
 
-// Mock data
+// Mock data com novos campos
 const mockLeads = [
-  { id: "1", cpf: "123.456.789-01", nome: "Ana Silva Santos", telefone: "(11) 99999-1234", classe: "Quente" as const, status: "Elegível" as const, contratos: 3 },
-  { id: "2", cpf: "987.654.321-02", nome: "Carlos Eduardo Lima", telefone: "(21) 98888-5678", classe: "Frio" as const, status: "Inelegível" as const, contratos: 1 },
-  { id: "3", cpf: "456.789.123-03", nome: "Maria Fernanda Costa", telefone: "(11) 97777-9012", classe: "Quente" as const, status: "Elegível" as const, contratos: 5 },
-  { id: "4", cpf: "789.123.456-04", nome: "João Pedro Oliveira", telefone: "(85) 96666-3456", classe: "Frio" as const, status: "Elegível" as const, contratos: 2 },
-  { id: "5", cpf: "321.654.987-05", nome: "Isabela Rodrigues", telefone: "(11) 95555-7890", classe: "Quente" as const, status: "Inelegível" as const, contratos: 1 },
-  { id: "6", cpf: "654.321.987-06", nome: "Rafael Mendes Silva", telefone: "(21) 94444-2345", classe: "Frio" as const, status: "Elegível" as const, contratos: 4 },
-  { id: "7", cpf: "147.258.369-07", nome: "Camila Santos Pereira", telefone: "(11) 93333-6789", classe: "Quente" as const, status: "Elegível" as const, contratos: 3 },
-  { id: "8", cpf: "258.369.147-08", nome: "Gustavo Ferreira", telefone: "(85) 92222-0123", classe: "Frio" as const, status: "Inelegível" as const, contratos: 1 },
-  { id: "9", cpf: "369.147.258-09", nome: "Larissa Almeida", telefone: "(21) 91111-4567", classe: "Quente" as const, status: "Elegível" as const, contratos: 6 },
-  { id: "10", cpf: "159.753.486-10", nome: "Bruno Costa Lima", telefone: "(11) 90000-8901", classe: "Frio" as const, status: "Elegível" as const, contratos: 2 },
+  { 
+    id: "1", 
+    cpf: "123.456.789-01", 
+    nome: "Ana Silva Santos", 
+    telefone: "(11) 99999-1234", 
+    classe: "Quente" as const, 
+    status: "Elegível" as const, 
+    contratos: 3,
+    saldo: 25000.50,
+    libera: 18000.30,
+    dataAtualizacao: "15/12/2024",
+    motivo: "Documentação completa"
+  },
+  { 
+    id: "2", 
+    cpf: "987.654.321-02", 
+    nome: "Carlos Eduardo Lima", 
+    telefone: "(21) 98888-5678", 
+    classe: "Frio" as const, 
+    status: "Inelegível" as const, 
+    contratos: 1,
+    saldo: 8500.00,
+    libera: 0.00,
+    dataAtualizacao: "14/12/2024",
+    motivo: "Pendência documental"
+  },
+  { 
+    id: "3", 
+    cpf: "456.789.123-03", 
+    nome: "Maria Fernanda Costa", 
+    telefone: "(11) 97777-9012", 
+    classe: "Quente" as const, 
+    status: "Elegível" as const, 
+    contratos: 5,
+    saldo: 42000.75,
+    libera: 35000.00,
+    dataAtualizacao: "16/12/2024",
+    motivo: "Aprovado sistema"
+  },
+  { 
+    id: "4", 
+    cpf: "789.123.456-04", 
+    nome: "João Pedro Oliveira", 
+    telefone: "(85) 96666-3456", 
+    classe: "Frio" as const, 
+    status: "Elegível" as const, 
+    contratos: 2,
+    saldo: 15200.80,
+    libera: 12000.00,
+    dataAtualizacao: "13/12/2024",
+    motivo: "Análise aprovada"
+  },
+  { 
+    id: "5", 
+    cpf: "321.654.987-05", 
+    nome: "Isabela Rodrigues", 
+    telefone: "(11) 95555-7890", 
+    classe: "Quente" as const, 
+    status: "Inelegível" as const, 
+    contratos: 1,
+    saldo: 5000.00,
+    libera: 0.00,
+    dataAtualizacao: "12/12/2024",
+    motivo: "Restrição CPF"
+  },
+  { 
+    id: "6", 
+    cpf: "654.321.987-06", 
+    nome: "Rafael Mendes Silva", 
+    telefone: "(21) 94444-2345", 
+    classe: "Frio" as const, 
+    status: "Elegível" as const, 
+    contratos: 4,
+    saldo: 31500.25,
+    libera: 28000.50,
+    dataAtualizacao: "16/12/2024",
+    motivo: "Processamento ok"
+  },
+  { 
+    id: "7", 
+    cpf: "147.258.369-07", 
+    nome: "Camila Santos Pereira", 
+    telefone: "(11) 93333-6789", 
+    classe: "Quente" as const, 
+    status: "Elegível" as const, 
+    contratos: 3,
+    saldo: 22000.40,
+    libera: 19500.00,
+    dataAtualizacao: "15/12/2024",
+    motivo: "Validação concluída"
+  },
+  { 
+    id: "8", 
+    cpf: "258.369.147-08", 
+    nome: "Gustavo Ferreira", 
+    telefone: "(85) 92222-0123", 
+    classe: "Frio" as const, 
+    status: "Inelegível" as const, 
+    contratos: 1,
+    saldo: 3200.00,
+    libera: 0.00,
+    dataAtualizacao: "11/12/2024",
+    motivo: "Score baixo"
+  },
+  { 
+    id: "9", 
+    cpf: "369.147.258-09", 
+    nome: "Larissa Almeida", 
+    telefone: "(21) 91111-4567", 
+    classe: "Quente" as const, 
+    status: "Elegível" as const, 
+    contratos: 6,
+    saldo: 58000.90,
+    libera: 52000.00,
+    dataAtualizacao: "17/12/2024",
+    motivo: "Alto potencial"
+  },
+  { 
+    id: "10", 
+    cpf: "159.753.486-10", 
+    nome: "Bruno Costa Lima", 
+    telefone: "(11) 90000-8901", 
+    classe: "Frio" as const, 
+    status: "Elegível" as const, 
+    contratos: 2,
+    saldo: 13800.60,
+    libera: 11000.20,
+    dataAtualizacao: "14/12/2024",
+    motivo: "Dados conferidos"
+  },
 ];
 
 const Dashboard = () => {

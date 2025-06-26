@@ -1,5 +1,5 @@
 
-import { Home, Database, Users, Settings, BarChart3 } from "lucide-react";
+import { Home, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
@@ -8,22 +8,19 @@ interface SidebarProps {
 
 const menuItems = [
   { name: "Dashboard", icon: Home, active: true },
-  { name: "Leads", icon: Users, active: false },
-  { name: "Importações", icon: Database, active: false },
-  { name: "Relatórios", icon: BarChart3, active: false },
-  { name: "Configurações", icon: Settings, active: false },
+  { name: "Sair", icon: LogOut, active: false },
 ];
 
 export const Sidebar = ({ className }: SidebarProps) => {
   return (
-    <div className={cn("w-60 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 z-30", className)}>
+    <div className={cn("w-60 bg-[#333] h-screen fixed left-0 top-0 z-30", className)}>
       {/* Logo */}
-      <div className="p-6 border-b border-gray-200">
+      <div className="p-6 border-b border-gray-600">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <Database className="w-5 h-5 text-white" />
+            <Home className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-semibold text-gray-900">LeadsManager</span>
+          <span className="text-xl font-semibold text-white">LeadsManager</span>
         </div>
       </div>
 
@@ -35,11 +32,11 @@ export const Sidebar = ({ className }: SidebarProps) => {
             className={cn(
               "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-left transition-colors duration-200",
               item.active 
-                ? "bg-blue-50 text-blue-700 border border-blue-200" 
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                ? "bg-blue-600 text-white" 
+                : "text-gray-300 hover:bg-gray-700 hover:text-white"
             )}
           >
-            <item.icon className={cn("w-5 h-5", item.active ? "text-blue-600" : "text-gray-500")} />
+            <item.icon className={cn("w-5 h-5", item.active ? "text-white" : "text-gray-400")} />
             <span className="font-medium">{item.name}</span>
           </button>
         ))}
