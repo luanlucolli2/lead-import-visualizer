@@ -43,30 +43,30 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
           </DialogTitle>
           <button
             onClick={onClose}
-            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="absolute right-4 top-4  opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
-            <X className="h-4 w-4" />
-            <span className="sr-only">Fechar</span>
+           
+        
           </button>
         </DialogHeader>
-        
+
         <div className="grid grid-cols-2 gap-6 py-4">
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium text-gray-500">CPF</label>
               <p className="text-sm font-mono text-gray-900">{lead.cpf}</p>
             </div>
-            
+
             <div>
               <label className="text-sm font-medium text-gray-500">Nome</label>
               <p className="text-sm text-gray-900 font-medium">{lead.nome}</p>
             </div>
-            
+
             <div>
               <label className="text-sm font-medium text-gray-500">Telefone</label>
               <p className="text-sm font-mono text-gray-900">{lead.telefone}</p>
             </div>
-            
+
             <div>
               <label className="text-sm font-medium text-gray-500">Classe</label>
               <span
@@ -80,7 +80,7 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
                 {lead.classe}
               </span>
             </div>
-            
+
             <div>
               <label className="text-sm font-medium text-gray-500">Status</label>
               <div className="flex items-center space-x-2">
@@ -98,32 +98,32 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
               </div>
             </div>
           </div>
-          
+
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium text-gray-500">Saldo</label>
               <p className="text-sm text-gray-900 font-semibold">{formatCurrency(lead.saldo)}</p>
               <p className="text-xs text-gray-500 mt-1">Valor total de FGTS retornado pelo robô</p>
             </div>
-            
+
             <div>
               <label className="text-sm font-medium text-gray-500">Libera</label>
               <p className="text-sm text-gray-900 font-semibold">{formatCurrency(lead.libera)}</p>
-              <p className="text-xs text-gray-500 mt-1">Montante de FGTS elegível para liberação</p>
+              <p className="text-xs text-gray-500 mt-1">Valor disponível para liberação</p>
             </div>
-            
+
             <div>
               <label className="text-sm font-medium text-gray-500">Data de Atualização</label>
               <p className="text-sm text-gray-900">{lead.dataAtualizacao}</p>
             </div>
-            
+
             <div>
               <label className="text-sm font-medium text-gray-500">Número de Contratos</label>
               <p className="text-sm text-gray-900 font-semibold">{lead.contratos}</p>
             </div>
           </div>
         </div>
-        
+
         <div className="flex justify-end pt-4 border-t">
           <Button onClick={onClose} variant="outline">
             Fechar

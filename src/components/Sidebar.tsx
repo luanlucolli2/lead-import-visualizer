@@ -1,6 +1,6 @@
-
 import { Home, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import catarinenselogo from "../../public/catainenseLogo.png";
 
 interface SidebarProps {
   className?: string;
@@ -15,13 +15,12 @@ export const Sidebar = ({ className }: SidebarProps) => {
   return (
     <div className={cn("w-60 bg-[#333] h-screen fixed left-0 top-0 z-30", className)}>
       {/* Logo */}
-      <div className="p-6 border-b border-gray-600">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <Home className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-semibold text-white">LeadsManager</span>
-        </div>
+      <div className="p-4 border-b border-gray-600 flex items-center justify-center">
+        <img
+          src={catarinenselogo}
+          alt="Logo Catarinense"
+          className="w-full h-16 object-contain"
+        />
       </div>
 
       {/* Menu Items */}
@@ -31,8 +30,8 @@ export const Sidebar = ({ className }: SidebarProps) => {
             key={item.name}
             className={cn(
               "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-left transition-colors duration-200",
-              item.active 
-                ? "bg-blue-600 text-white" 
+              item.active
+                ? "bg-green-700 text-white"
                 : "text-gray-300 hover:bg-gray-700 hover:text-white"
             )}
           >
