@@ -13,17 +13,9 @@ interface ImportModalProps {
 
 const suggestedOrigins = [
   "Site Corporativo",
-  "Landing Page",
-  "Facebook Ads",
-  "Google Ads",
-  "Instagram",
-  "WhatsApp Business",
-  "Parceiros",
-  "Indicação",
-  "Telemarketing",
-  "Email Marketing",
-  "Eventos",
-  "Feiras"
+  "API Externa",
+  "Exemplo",
+  "Exemplo 2"
 ];
 
 export const ImportModal = ({ isOpen, onClose, onImport }: ImportModalProps) => {
@@ -80,7 +72,7 @@ export const ImportModal = ({ isOpen, onClose, onImport }: ImportModalProps) => 
   const handleDownloadTemplate = () => {
     console.log(`Downloading template for ${importType}`);
     const templateName = importType === 'cadastrais' ? 'template_dados_cadastrais.xlsx' : 'template_higienizacao.xlsx';
-    
+
     const link = document.createElement('a');
     link.href = '#';
     link.download = templateName;
