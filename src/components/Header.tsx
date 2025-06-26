@@ -17,6 +17,8 @@ interface HeaderProps {
   onContractsFilterChange: (value: "todos" | "mais" | "menos") => void;
   motivosFilter: string[];
   onMotivosFilterChange: (values: string[]) => void;
+  origemFilter: string[];
+  onOrigemFilterChange: (values: string[]) => void;
   cpfMassFilter: string;
   onCpfMassFilterChange: (value: string) => void;
   namesMassFilter: string;
@@ -30,6 +32,7 @@ interface HeaderProps {
   onApplyFilters: () => void;
   onClearFilters: () => void;
   availableMotivos: string[];
+  availableOrigens: string[];
   hasActiveFilters: boolean;
 }
 
@@ -44,6 +47,8 @@ export const Header = ({
   onContractsFilterChange,
   motivosFilter,
   onMotivosFilterChange,
+  origemFilter,
+  onOrigemFilterChange,
   cpfMassFilter,
   onCpfMassFilterChange,
   namesMassFilter,
@@ -57,6 +62,7 @@ export const Header = ({
   onApplyFilters,
   onClearFilters,
   availableMotivos,
+  availableOrigens,
   hasActiveFilters,
 }: HeaderProps) => {
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
@@ -142,10 +148,12 @@ export const Header = ({
         onContractsFilterChange={onContractsFilterChange}
         motivosFilter={motivosFilter}
         onMotivosFilterChange={onMotivosFilterChange}
+        origemFilter={origemFilter}
+        onOrigemFilterChange={onOrigemFilterChange}
         cpfMassFilter={cpfMassFilter}
         onCpfMassFilterChange={onCpfMassFilterChange}
         namesMassFilter={namesMassFilter}
-        onNamesMassFilterChange={onNamesMassFilterChange}
+        onNamesMassFilterChange={onNamesMassFilter}
         phonesMassFilter={phonesMassFilter}
         onPhonesMassFilterChange={onPhonesMassFilterChange}
         dateFromFilter={dateFromFilter}
@@ -155,6 +163,7 @@ export const Header = ({
         onApplyFilters={onApplyFilters}
         onClearFilters={onClearFilters}
         availableMotivos={availableMotivos}
+        availableOrigens={availableOrigens}
       />
     </div>
   );
