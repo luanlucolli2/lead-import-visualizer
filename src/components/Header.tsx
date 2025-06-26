@@ -1,4 +1,3 @@
-
 import { Search, Upload, Download, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -148,7 +147,7 @@ export const Header = ({
         eligibleFilter={eligibleFilter}
         onEligibleFilterChange={onEligibleFilterChange}
         contractsFilter={contractsFilter}
-        onContractsFilterChange={onContractsFilter}
+        onContractsFilterChange={onContractsFilterChange}
         motivosFilter={motivosFilter}
         onMotivosFilterChange={onMotivosFilterChange}
         origemFilter={origemFilter}
