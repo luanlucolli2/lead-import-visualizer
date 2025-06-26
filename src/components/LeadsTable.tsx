@@ -50,118 +50,120 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
 
   return (
     <>
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden w-full">
         {/* Desktop Table */}
-        <div className="hidden lg:block overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 sticky top-0">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  CPF
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Nome
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Telefone
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Classe
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Saldo
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Libera
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Atualização
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Contratos
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Origem
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Ações
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {leads.map((lead) => (
-                <tr key={lead.id} className="hover:bg-gray-50 transition-colors duration-150">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
-                    {lead.cpf}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
-                    {lead.nome}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
-                    {lead.telefone}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={cn(
-                        "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
-                        lead.classe === "Quente"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-blue-100 text-blue-800"
-                      )}
-                    >
-                      {lead.classe}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center space-x-2">
+        <div className="hidden lg:block w-full">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[1200px]">
+              <thead className="bg-gray-50 sticky top-0">
+                <tr>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[110px]">
+                    CPF
+                  </th>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[140px]">
+                    Nome
+                  </th>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
+                    Telefone
+                  </th>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
+                    Classe
+                  </th>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
+                    Status
+                  </th>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
+                    Saldo
+                  </th>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
+                    Libera
+                  </th>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
+                    Atualização
+                  </th>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
+                    Contratos
+                  </th>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
+                    Origem
+                  </th>
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
+                    Ações
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {leads.map((lead) => (
+                  <tr key={lead.id} className="hover:bg-gray-50 transition-colors duration-150">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
+                      {lead.cpf}
+                    </td>
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium max-w-[200px] truncate">
+                      {lead.nome}
+                    </td>
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
+                      {lead.telefone}
+                    </td>
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap">
                       <span
                         className={cn(
                           "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
-                          lead.status === "Elegível"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
+                          lead.classe === "Quente"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-blue-100 text-blue-800"
                         )}
                       >
-                        {lead.status}
+                        {lead.classe}
                       </span>
-                      <span className="text-xs text-gray-500">• {lead.motivo}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
-                    {formatCurrency(lead.saldo)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
-                    {formatCurrency(lead.libera)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {lead.dataAtualizacao}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
-                    {lead.contratos}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <span className="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">
-                      {lead.origem}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <Button
-                      onClick={() => handleViewLead(lead)}
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center space-x-1"
-                    >
-                      <Eye className="w-4 h-4" />
-                      <span>Ver</span>
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap">
+                      <div className="flex flex-col space-y-1">
+                        <span
+                          className={cn(
+                            "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
+                            lead.status === "Elegível"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-800"
+                          )}
+                        >
+                          {lead.status}
+                        </span>
+                        <span className="text-xs text-gray-500 truncate max-w-[100px]">{lead.motivo}</span>
+                      </div>
+                    </td>
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                      {formatCurrency(lead.saldo)}
+                    </td>
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                      {formatCurrency(lead.libera)}
+                    </td>
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {lead.dataAtualizacao}
+                    </td>
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                      {lead.contratos}
+                    </td>
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <span className="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full max-w-[100px] truncate">
+                        {lead.origem}
+                      </span>
+                    </td>
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap">
+                      <Button
+                        onClick={() => handleViewLead(lead)}
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center space-x-1"
+                      >
+                        <Eye className="w-4 h-4" />
+                        <span className="hidden xl:inline">Ver</span>
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Mobile/Tablet Cards */}
@@ -170,8 +172,8 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
             <div key={lead.id} className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
               {/* Header */}
               <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="font-medium text-gray-900">{lead.nome}</h3>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-medium text-gray-900 truncate">{lead.nome}</h3>
                   <p className="text-sm font-mono text-gray-600">{lead.cpf}</p>
                   <p className="text-sm font-mono text-gray-600">{lead.telefone}</p>
                 </div>
@@ -179,7 +181,7 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                   onClick={() => handleViewLead(lead)}
                   variant="outline"
                   size="sm"
-                  className="flex items-center space-x-1"
+                  className="flex items-center space-x-1 flex-shrink-0 ml-2"
                 >
                   <Eye className="w-4 h-4" />
                   <span>Ver</span>
@@ -187,8 +189,8 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
               </div>
 
               {/* Status and Class */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center space-x-2 flex-wrap">
                   <span
                     className={cn(
                       "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
@@ -231,7 +233,7 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
               {/* Bottom Info */}
               <div className="flex justify-between items-center text-xs text-gray-500 pt-2 border-t">
                 <span>Atualizado: {lead.dataAtualizacao}</span>
-                <span>{lead.motivo}</span>
+                <span className="truncate ml-2">{lead.motivo}</span>
               </div>
             </div>
           ))}
