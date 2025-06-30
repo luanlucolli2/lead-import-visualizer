@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, ChevronUp, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LeadDetailsModal } from "./LeadDetailsModal";
@@ -20,6 +20,9 @@ interface Lead {
   origem: string;
 }
 
+type SortField = 'nome' | 'cpf' | 'telefone' | 'classe' | 'status' | 'saldo' | 'libera' | 'dataAtualizacao' | 'contratos' | 'origem';
+type SortDirection = 'asc' | 'desc';
+
 interface LeadsTableProps {
   leads: Lead[];
   currentPage: number;
@@ -30,6 +33,8 @@ interface LeadsTableProps {
 export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: LeadsTableProps) => {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortField, setSortField] = useState<SortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
   const handleViewLead = (lead: Lead) => {
     setSelectedLead(lead);
@@ -48,6 +53,62 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
     }).format(value);
   };
 
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedLeads = [...leads].sort((a, b) => {
+    if (!sortField) return 0;
+
+    let aValue: any = a[sortField];
+    let bValue: any = b[sortField];
+
+    // Handle date sorting
+    if (sortField === 'dataAtualizacao') {
+      const [dayA, monthA, yearA] = aValue.split('/');
+      const [dayB, monthB, yearB] = bValue.split('/');
+      aValue = new Date(parseInt(yearA), parseInt(monthA) - 1, parseInt(dayA));
+      bValue = new Date(parseInt(yearB), parseInt(monthB) - 1, parseInt(dayB));
+    }
+
+    // Handle string sorting
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      aValue = aValue.toLowerCase();
+      bValue = bValue.toLowerCase();
+    }
+
+    if (aValue < bValue) {
+      return sortDirection === 'asc' ? -1 : 1;
+    }
+    if (aValue > bValue) {
+      return sortDirection === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+
+  const SortButton = ({ field, children }: { field: SortField; children: React.ReactNode }) => (
+    <button
+      onClick={() => handleSort(field)}
+      className="flex items-center space-x-1 hover:bg-gray-100 px-2 py-1 rounded transition-colors duration-150"
+    >
+      <span>{children}</span>
+      {sortField === field ? (
+        sortDirection === 'asc' ? (
+          <ChevronUp className="w-3 h-3" />
+        ) : (
+          <ChevronDown className="w-3 h-3" />
+        )
+      ) : (
+        <div className="w-3 h-3" />
+      )}
+    </button>
+  );
+
   return (
     <>
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden w-full max-w-full">
@@ -58,34 +119,34 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
               <thead className="bg-gray-50 sticky top-0">
                 <tr>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[110px]">
-                    CPF
+                    <SortButton field="cpf">CPF</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[140px]">
-                    Nome
+                    <SortButton field="nome">Nome</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                    Telefone
+                    <SortButton field="telefone">Telefone</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
-                    Classe
+                    <SortButton field="classe">Classe</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
-                    Status
+                    <SortButton field="status">Status</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
-                    Saldo
+                    <SortButton field="saldo">Saldo</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
-                    Libera
+                    <SortButton field="libera">Libera</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
-                    Atualização
+                    <SortButton field="dataAtualizacao">Atualização</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
-                    Contratos
+                    <SortButton field="contratos">Contratos</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
-                    Origem
+                    <SortButton field="origem">Origem</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
                     Ações
@@ -93,7 +154,7 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {leads.map((lead) => (
+                {sortedLeads.map((lead) => (
                   <tr key={lead.id} className="hover:bg-gray-50 transition-colors duration-150">
                     <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
                       {lead.cpf}
@@ -168,7 +229,7 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
 
         {/* Mobile/Tablet Cards */}
         <div className="lg:hidden space-y-4 p-4 max-w-full">
-          {leads.map((lead) => (
+          {sortedLeads.map((lead) => (
             <div key={lead.id} className="bg-white border border-gray-200 rounded-lg p-4 space-y-3 max-w-full">
               {/* Header */}
               <div className="flex justify-between items-start min-w-0">

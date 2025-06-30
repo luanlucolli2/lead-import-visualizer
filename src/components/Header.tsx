@@ -1,5 +1,5 @@
 
-import { Search, Upload, Download, Filter } from "lucide-react";
+import { Search, Upload, Download, Filter, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -13,8 +13,10 @@ interface HeaderProps {
   onSearchChange: (value: string) => void;
   eligibleFilter: "todos" | "elegiveis" | "nao-elegiveis";
   onEligibleFilterChange: (value: "todos" | "elegiveis" | "nao-elegiveis") => void;
-  contractsFilter: "todos" | "mais" | "menos";
-  onContractsFilterChange: (value: "todos" | "mais" | "menos") => void;
+  contractDateFromFilter: string;
+  onContractDateFromFilterChange: (value: string) => void;
+  contractDateToFilter: string;
+  onContractDateToFilterChange: (value: string) => void;
   motivosFilter: string[];
   onMotivosFilterChange: (values: string[]) => void;
   origemFilter: string[];
@@ -34,6 +36,7 @@ interface HeaderProps {
   availableMotivos: string[];
   availableOrigens: string[];
   hasActiveFilters: boolean;
+  onToggleSidebar: () => void;
 }
 
 export const Header = ({
@@ -43,8 +46,10 @@ export const Header = ({
   onSearchChange,
   eligibleFilter,
   onEligibleFilterChange,
-  contractsFilter,
-  onContractsFilterChange,
+  contractDateFromFilter,
+  onContractDateFromFilterChange,
+  contractDateToFilter,
+  onContractDateToFilterChange,
   motivosFilter,
   onMotivosFilterChange,
   origemFilter,
@@ -64,6 +69,7 @@ export const Header = ({
   availableMotivos,
   availableOrigens,
   hasActiveFilters,
+  onToggleSidebar,
 }: HeaderProps) => {
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
 
@@ -71,8 +77,19 @@ export const Header = ({
     <div className="bg-white border-b border-gray-200 w-full max-w-full overflow-hidden">
       <div className="px-3 sm:px-4 lg:px-6 py-4 max-w-full">
         <div className="space-y-3 sm:space-y-4 max-w-full">
-          {/* Main Row - Search and Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-full justify-between">
+          {/* Main Row - Sidebar Toggle, Search and Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-full">
+            {/* Sidebar Toggle Button (visible on mobile/tablet) */}
+            <Button
+              onClick={onToggleSidebar}
+              variant="outline"
+              size="sm"
+              className="lg:hidden flex items-center justify-center px-2 border-gray-300 hover:bg-gray-50 text-xs sm:text-sm flex-shrink-0 self-start"
+            >
+              <Menu className="w-4 h-4" />
+              <span className="ml-2">Menu</span>
+            </Button>
+
             {/* Search Field */}
             <div className="relative flex-1 min-w-0 max-w-full sm:max-w-xs lg:max-w-sm">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 flex-shrink-0" />
@@ -151,8 +168,10 @@ export const Header = ({
         onSearchChange={onSearchChange}
         eligibleFilter={eligibleFilter}
         onEligibleFilterChange={onEligibleFilterChange}
-        contractsFilter={contractsFilter}
-        onContractsFilterChange={onContractsFilterChange}
+        contractDateFromFilter={contractDateFromFilter}
+        onContractDateFromFilterChange={onContractDateFromFilterChange}
+        contractDateToFilter={contractDateToFilter}
+        onContractDateToFilterChange={onContractDateToFilterChange}
         motivosFilter={motivosFilter}
         onMotivosFilterChange={onMotivosFilterChange}
         origemFilter={origemFilter}
