@@ -1,7 +1,8 @@
 
-import { Home, LogOut, Menu } from "lucide-react";
+import { Home, LogOut, Menu, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useNavigate, useLocation } from "react-router-dom";
 import catarinenselogo from "../../public/catainenseLogo.png";
 
 interface SidebarProps {
@@ -10,12 +11,40 @@ interface SidebarProps {
   onToggle: () => void;
 }
 
-const menuItems = [
-  { name: "Dashboard", icon: Home, active: true },
-  { name: "Sair", icon: LogOut, active: false },
-];
+const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-export const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
+  const menuItems = [
+    { 
+      name: "Dashboard", 
+      icon: Home, 
+      path: "/",
+      active: location.pathname === "/"
+    },
+    { 
+      name: "Histórico de Importações", 
+      icon: FileText, 
+      path: "/importacoes/historico",
+      active: location.pathname === "/importacoes/historico"
+    },
+    { 
+      name: "Sair", 
+      icon: LogOut, 
+      path: null,
+      active: false 
+    },
+  ];
+
+  const handleMenuClick = (item: typeof menuItems[0]) => {
+    if (item.path) {
+      navigate(item.path);
+    } else if (item.name === "Sair") {
+      // Lógica de logout aqui
+      console.log("Logout clicked");
+    }
+  };
+
   return (
     <>
       {/* Mobile overlay */}
@@ -58,6 +87,7 @@ export const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
           {menuItems.map((item) => (
             <button
               key={item.name}
+              onClick={() => handleMenuClick(item)}
               className={cn(
                 "w-full flex items-center px-3 py-3 rounded-lg text-left transition-colors duration-200",
                 isCollapsed ? "justify-center" : "space-x-3",
@@ -81,3 +111,5 @@ export const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
     </>
   );
 };
+
+export { Sidebar };
