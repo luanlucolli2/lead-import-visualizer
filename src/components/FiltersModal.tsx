@@ -15,8 +15,10 @@ interface FiltersModalProps {
   onSearchChange: (value: string) => void;
   eligibleFilter: "todos" | "elegiveis" | "nao-elegiveis";
   onEligibleFilterChange: (value: "todos" | "elegiveis" | "nao-elegiveis") => void;
-  contractsFilter: "todos" | "mais" | "menos";
-  onContractsFilterChange: (value: "todos" | "mais" | "menos") => void;
+  contractDateFromFilter: string;
+  onContractDateFromFilterChange: (value: string) => void;
+  contractDateToFilter: string;
+  onContractDateToFilterChange: (value: string) => void;
   motivosFilter: string[];
   onMotivosFilterChange: (values: string[]) => void;
   origemFilter: string[];
@@ -44,8 +46,10 @@ export const FiltersModal = ({
   onSearchChange,
   eligibleFilter,
   onEligibleFilterChange,
-  contractsFilter,
-  onContractsFilterChange,
+  contractDateFromFilter,
+  onContractDateFromFilterChange,
+  contractDateToFilter,
+  onContractDateToFilterChange,
   motivosFilter,
   onMotivosFilterChange,
   origemFilter,
@@ -115,19 +119,27 @@ export const FiltersModal = ({
                 </Select>
               </div>
 
-              {/* Contracts Filter */}
+              {/* Contract Date Range Filter */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Número de Contratos</label>
-                <Select value={contractsFilter} onValueChange={onContractsFilterChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecionar..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="todos">Todos</SelectItem>
-                    <SelectItem value="mais">Mais contratos (3+)</SelectItem>
-                    <SelectItem value="menos">Menos contratos</SelectItem>
-                  </SelectContent>
-                </Select>
+                <label className="text-sm font-medium text-gray-700">Período de Contratos</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs text-gray-500">Data Inicial</label>
+                    <Input
+                      type="date"
+                      value={contractDateFromFilter}
+                      onChange={(e) => onContractDateFromFilterChange(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500">Data Final</label>
+                    <Input
+                      type="date"
+                      value={contractDateToFilter}
+                      onChange={(e) => onContractDateToFilterChange(e.target.value)}
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Motivos Filter */}
