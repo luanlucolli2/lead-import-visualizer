@@ -50,10 +50,10 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
 
   return (
     <>
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden w-full">
+      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden w-full max-w-full">
         {/* Desktop Table */}
-        <div className="hidden lg:block w-full">
-          <div className="overflow-x-auto">
+        <div className="hidden lg:block w-full max-w-full">
+          <div className="overflow-x-auto max-w-full">
             <table className="w-full min-w-[1200px]">
               <thead className="bg-gray-50 sticky top-0">
                 <tr>
@@ -167,15 +167,15 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
         </div>
 
         {/* Mobile/Tablet Cards */}
-        <div className="lg:hidden space-y-4 p-4">
+        <div className="lg:hidden space-y-4 p-4 max-w-full">
           {leads.map((lead) => (
-            <div key={lead.id} className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
+            <div key={lead.id} className="bg-white border border-gray-200 rounded-lg p-4 space-y-3 max-w-full">
               {/* Header */}
-              <div className="flex justify-between items-start">
+              <div className="flex justify-between items-start min-w-0">
                 <div className="min-w-0 flex-1">
                   <h3 className="font-medium text-gray-900 truncate">{lead.nome}</h3>
-                  <p className="text-sm font-mono text-gray-600">{lead.cpf}</p>
-                  <p className="text-sm font-mono text-gray-600">{lead.telefone}</p>
+                  <p className="text-sm font-mono text-gray-600 truncate">{lead.cpf}</p>
+                  <p className="text-sm font-mono text-gray-600 truncate">{lead.telefone}</p>
                 </div>
                 <Button
                   onClick={() => handleViewLead(lead)}
@@ -189,11 +189,11 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
               </div>
 
               {/* Status and Class */}
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center space-x-2 flex-wrap">
+              <div className="flex items-center justify-between flex-wrap gap-2 min-w-0">
+                <div className="flex items-center space-x-2 flex-wrap min-w-0">
                   <span
                     className={cn(
-                      "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
+                      "inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0",
                       lead.classe === "Quente"
                         ? "bg-red-100 text-red-800"
                         : "bg-blue-100 text-blue-800"
@@ -203,7 +203,7 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                   </span>
                   <span
                     className={cn(
-                      "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
+                      "inline-flex px-2 py-1 text-xs font-semibold rounded-full flex-shrink-0",
                       lead.status === "Elegível"
                         ? "bg-green-100 text-green-800"
                         : "bg-gray-100 text-gray-800"
@@ -211,40 +211,40 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                   >
                     {lead.status}
                   </span>
-                  <span className="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">
+                  <span className="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full flex-shrink-0 max-w-[120px] truncate">
                     {lead.origem}
                   </span>
                 </div>
-                <span className="text-xs text-gray-500">{lead.contratos} contratos</span>
+                <span className="text-xs text-gray-500 flex-shrink-0">{lead.contratos} contratos</span>
               </div>
 
               {/* Financial Info */}
               <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
+                <div className="min-w-0">
                   <span className="text-gray-500">Saldo:</span>
-                  <p className="font-semibold">{formatCurrency(lead.saldo)}</p>
+                  <p className="font-semibold truncate">{formatCurrency(lead.saldo)}</p>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <span className="text-gray-500">Libera:</span>
-                  <p className="font-semibold">{formatCurrency(lead.libera)}</p>
+                  <p className="font-semibold truncate">{formatCurrency(lead.libera)}</p>
                 </div>
               </div>
 
               {/* Bottom Info */}
-              <div className="flex justify-between items-center text-xs text-gray-500 pt-2 border-t">
-                <span>Atualizado: {lead.dataAtualizacao}</span>
-                <span className="truncate ml-2">{lead.motivo}</span>
+              <div className="flex justify-between items-center text-xs text-gray-500 pt-2 border-t min-w-0">
+                <span className="flex-shrink-0">Atualizado: {lead.dataAtualizacao}</span>
+                <span className="truncate ml-2 min-w-0">{lead.motivo}</span>
               </div>
             </div>
           ))}
         </div>
 
         {/* Pagination */}
-        <div className="bg-white px-4 lg:px-6 py-3 border-t border-gray-200 flex items-center justify-between">
-          <div className="text-sm text-gray-500">
+        <div className="bg-white px-4 lg:px-6 py-3 border-t border-gray-200 flex items-center justify-between max-w-full">
+          <div className="text-sm text-gray-500 flex-shrink-0">
             Página {currentPage} de {totalPages}
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 flex-shrink-0">
             <button
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1}

@@ -351,13 +351,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex w-full">
+    <div className="min-h-screen bg-gray-50 flex w-full max-w-full overflow-x-hidden">
       <Sidebar 
         isCollapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
       
-      <div className={`flex-1 transition-all duration-300 ${
+      <div className={`flex-1 transition-all duration-300 min-w-0 max-w-full ${
         sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60'
       }`}>
         <Header
@@ -390,8 +390,8 @@ const Dashboard = () => {
           hasActiveFilters={hasActiveFilters}
         />
         
-        <div className="p-4 lg:p-6">
-          <div className="mb-6">
+        <div className="p-4 lg:p-6 max-w-full min-w-0">
+          <div className="mb-6 max-w-full">
             <h1 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2">Dashboard</h1>
             <p className="text-gray-600 text-sm lg:text-base">
               Gerencie e visualize seus leads importados ({filteredLeads.length} leads encontrados)
