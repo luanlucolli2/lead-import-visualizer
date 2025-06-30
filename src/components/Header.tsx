@@ -78,38 +78,40 @@ export const Header = ({
       <div className="px-3 sm:px-4 lg:px-6 py-4 max-w-full">
         <div className="space-y-3 sm:space-y-4 max-w-full">
           {/* Main Row - Sidebar Toggle, Search and Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-full">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-full justify-between">
             {/* Sidebar Toggle Button (visible on mobile/tablet) */}
-            <Button
-              onClick={onToggleSidebar}
-              variant="outline"
-              size="sm"
-              className="lg:hidden flex items-center justify-center px-2 border-gray-300 hover:bg-gray-50 text-xs sm:text-sm flex-shrink-0 self-start"
-            >
-              <Menu className="w-4 h-4" />
-              <span className="ml-2">Menu</span>
-            </Button>
+            <div className="flex flex-row items-center gap-2 sm:gap-3 ">
+              <Button
+                onClick={onToggleSidebar}
+                variant="outline"
+                size="sm"
+                className="h-10 flex items-center justify-center px-2 border-gray-300 hover:bg-gray-50 text-xs sm:text-sm flex-shrink-0"
+              >
+                <Menu className="w-4 h-4" />
+                <span className="ml-2">Menu</span>
+              </Button>
 
-            {/* Search Field */}
-            <div className="relative flex-1 min-w-0 max-w-full sm:max-w-xs lg:max-w-sm">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 flex-shrink-0" />
-              <Input
-                type="text"
-                placeholder="Pesquisar leads..."
-                value={searchValue}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-10 w-full min-w-0"
-              />
+              {/* Search Field */}
+              <div className="relative flex-1 min-w-0 max-w-full sm:max-w-xs lg:max-w-sm">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 flex-shrink-0" />
+                <Input
+                  type="text"
+                  placeholder="Pesquisar leads..."
+                  value={searchValue}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  className="pl-10 w-full min-w-0 h-10"
+                />
+              </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex items-center gap-2 flex-shrink-0 min-w-0">
-              <Button 
-                onClick={() => setIsFiltersModalOpen(true)} 
-                variant="outline" 
+              <Button
+                onClick={() => setIsFiltersModalOpen(true)}
+                variant="outline"
                 size="sm"
                 className={cn(
-                  "flex items-center justify-center min-w-0 px-2 sm:px-3 border-gray-300 hover:bg-gray-50 relative text-xs sm:text-sm flex-shrink-0",
+                  "h-10 flex items-center justify-center min-w-0 px-2 sm:px-3 border-gray-300 hover:bg-gray-50 relative text-xs sm:text-sm flex-shrink-0",
                   hasActiveFilters && "border-blue-500 bg-blue-50 text-blue-700"
                 )}
               >
@@ -119,21 +121,21 @@ export const Header = ({
                   <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>
                 )}
               </Button>
-              
-              <Button 
-                onClick={onExportClick} 
-                variant="outline" 
+
+              <Button
+                onClick={onExportClick}
+                variant="outline"
                 size="sm"
-                className="flex items-center justify-center min-w-0 px-2 sm:px-3 border-gray-300 hover:bg-gray-50 text-xs sm:text-sm flex-shrink-0"
+                className="h-10 flex items-center justify-center min-w-0 px-2 sm:px-3 border-gray-300 hover:bg-gray-50 text-xs sm:text-sm flex-shrink-0"
               >
                 <Download className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                 <span className="ml-1 sm:ml-2 hidden xs:inline whitespace-nowrap">Exportar</span>
               </Button>
-              
-              <Button 
-                onClick={onImportClick} 
+
+              <Button
+                onClick={onImportClick}
                 size="sm"
-                className="flex items-center justify-center min-w-0 px-2 sm:px-3 bg-blue-600 hover:bg-blue-700 text-xs sm:text-sm flex-shrink-0"
+                className="h-10 flex items-center justify-center min-w-0 px-2 sm:px-3 bg-blue-600 hover:bg-blue-700 text-xs sm:text-sm flex-shrink-0"
               >
                 <Upload className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                 <span className="ml-1 sm:ml-2 hidden xs:inline whitespace-nowrap">Importar</span>

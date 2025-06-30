@@ -153,7 +153,8 @@ const mockLeads = [
 const Dashboard = () => {
   const [searchValue, setSearchValue] = useState("");
   const [eligibleFilter, setEligibleFilter] = useState<"todos" | "elegiveis" | "nao-elegiveis">("todos");
-  const [contractsFilter, setContractsFilter] = useState<"todos" | "mais" | "menos">("todos");
+  const [contractDateFromFilter, setContractDateFromFilter] = useState("");
+  const [contractDateToFilter, setContractDateToFilter] = useState("");
   const [motivosFilter, setMotivosFilter] = useState<string[]>([]);
   const [origemFilter, setOrigemFilter] = useState<string[]>([]);
   const [cpfMassFilter, setCpfMassFilter] = useState("");
@@ -212,6 +213,23 @@ const Dashboard = () => {
     return true;
   };
 
+  // Check if contract date is in range
+  const isContractDateInRange = (contratos: number, fromDate: string, toDate: string): boolean => {
+    if (!fromDate && !toDate) return true;
+    
+    // Para este exemplo, vamos assumir que quanto mais contratos, mais recente
+    // Em um cenário real, você teria uma data específica para cada contrato
+    const contractDate = new Date();
+    contractDate.setDate(contractDate.getDate() - (10 - contratos) * 30); // Simulação
+    
+    const contractDateStr = contractDate.toISOString().split('T')[0];
+    
+    if (fromDate && contractDateStr < fromDate) return false;
+    if (toDate && contractDateStr > toDate) return false;
+    
+    return true;
+  };
+
   const handleApplyFilters = () => {
     // Apply CPF filter
     if (cpfMassFilter.trim()) {
@@ -248,7 +266,8 @@ const Dashboard = () => {
   const handleClearFilters = () => {
     setSearchValue("");
     setEligibleFilter("todos");
-    setContractsFilter("todos");
+    setContractDateFromFilter("");
+    setContractDateToFilter("");
     setMotivosFilter([]);
     setOrigemFilter([]);
     setCpfMassFilter("");
@@ -271,7 +290,8 @@ const Dashboard = () => {
   const hasActiveFilters = 
     searchValue !== "" ||
     eligibleFilter !== "todos" ||
-    contractsFilter !== "todos" ||
+    contractDateFromFilter !== "" ||
+    contractDateToFilter !== "" ||
     motivosFilter.length > 0 ||
     origemFilter.length > 0 ||
     appliedCpfList.length > 0 ||
@@ -295,14 +315,6 @@ const Dashboard = () => {
       matchesEligible = lead.status === "Inelegível";
     }
 
-    // Contracts filter
-    let matchesContracts = true;
-    if (contractsFilter === "mais") {
-      matchesContracts = lead.contratos >= 3;
-    } else if (contractsFilter === "menos") {
-      matchesContracts = lead.contratos < 3;
-    }
-
     // Motivos filter
     const matchesMotivos = motivosFilter.length === 0 || motivosFilter.includes(lead.motivo);
 
@@ -323,7 +335,10 @@ const Dashboard = () => {
     // Date range filter
     const matchesDateRange = isDateInRange(lead.dataAtualizacao, dateFromFilter, dateToFilter);
 
-    return matchesSearch && matchesEligible && matchesContracts && matchesMotivos && 
+    // Contract date range filter
+    const matchesContractDateRange = isContractDateInRange(lead.contratos, contractDateFromFilter, contractDateToFilter);
+
+    return matchesSearch && matchesEligible && matchesContractDateRange && matchesMotivos && 
            matchesOrigem && matchesCpfMass && matchesNamesMass && matchesPhonesMass && matchesDateRange;
   });
 
@@ -367,8 +382,10 @@ const Dashboard = () => {
           onSearchChange={setSearchValue}
           eligibleFilter={eligibleFilter}
           onEligibleFilterChange={setEligibleFilter}
-          contractsFilter={contractsFilter}
-          onContractsFilterChange={setContractsFilter}
+          contractDateFromFilter={contractDateFromFilter}
+          onContractDateFromFilterChange={setContractDateFromFilter}
+          contractDateToFilter={contractDateToFilter}
+          onContractDateToFilterChange={setContractDateToFilter}
           motivosFilter={motivosFilter}
           onMotivosFilterChange={setMotivosFilter}
           origemFilter={origemFilter}
@@ -388,6 +405,7 @@ const Dashboard = () => {
           availableMotivos={availableMotivos}
           availableOrigens={availableOrigens}
           hasActiveFilters={hasActiveFilters}
+          onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
         
         <div className="p-4 lg:p-6 max-w-full min-w-0">
