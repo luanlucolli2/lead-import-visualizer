@@ -72,7 +72,7 @@ export const Header = ({
       <div className="px-3 sm:px-4 lg:px-6 py-4 max-w-full">
         <div className="space-y-3 sm:space-y-4 max-w-full">
           {/* Main Row - Search and Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-full">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-full justify-between">
             {/* Search Field */}
             <div className="relative flex-1 min-w-0 max-w-full sm:max-w-xs lg:max-w-sm">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 flex-shrink-0" />
