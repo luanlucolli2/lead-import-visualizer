@@ -27,14 +27,13 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex w-full max-w-full overflow-x-hidden">
-      <Sidebar 
+      <Sidebar
         isCollapsed={sidebarCollapsed}
         onToggle={toggleSidebar}
       />
-      
-      <div className={`flex-1 transition-all duration-300 min-w-0 max-w-full ${
-        sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60'
-      }`}>
+
+      <div className={`flex-1 transition-all duration-300 min-w-0 max-w-full ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60'
+        }`}>
         {/* Global Header - Altura alinhada com o header da sidebar */}
         <div className="bg-white border-b border-gray-200 w-full">
           <div className="px-4 py-4 flex items-center justify-between min-h-[73px]">
@@ -48,13 +47,9 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
                 <Menu className="w-4 h-4" />
                 <span className="ml-2">Menu</span>
               </Button>
-              
+
               <div className="flex items-center gap-2">
-                <img
-                  src={catarinenselogo}
-                  alt="Logo Catarinense"
-                  className="h-8 object-contain"
-                />
+
                 <h1 className="text-lg font-semibold text-gray-900">Sistema de Leads</h1>
               </div>
             </div>
