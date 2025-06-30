@@ -39,7 +39,10 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
   const handleMenuClick = (item: typeof menuItems[0]) => {
     if (item.path) {
       navigate(item.path);
-      // Não fechar a sidebar automaticamente no desktop
+      // Fechar a sidebar apenas no mobile após navegação
+      if (window.innerWidth < 1024 && !isCollapsed) {
+        onToggle();
+      }
     } else if (item.name === "Sair") {
       // Lógica de logout aqui
       console.log("Logout clicked");

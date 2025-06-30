@@ -2,7 +2,7 @@
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/Sidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import catarinenselogo from "../../public/catainenseLogo.png";
 
 interface AppLayoutProps {
@@ -10,7 +10,16 @@ interface AppLayoutProps {
 }
 
 export const AppLayout = ({ children }: AppLayoutProps) => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    // Recuperar o estado da sidebar do localStorage
+    const saved = localStorage.getItem('sidebar-collapsed');
+    return saved !== null ? JSON.parse(saved) : false;
+  });
+
+  // Salvar o estado da sidebar no localStorage sempre que mudar
+  useEffect(() => {
+    localStorage.setItem('sidebar-collapsed', JSON.stringify(sidebarCollapsed));
+  }, [sidebarCollapsed]);
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
