@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import catarinenselogo from "../../public/catainenseLogo.png";
+import React from "react";
 
 interface SidebarProps {
   className?: string;
@@ -17,37 +18,40 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
   const location = useLocation();
 
   const menuItems = [
-    { 
-      name: "Dashboard", 
-      icon: Home, 
+    {
+      name: "Dashboard",
+      icon: Home,
       path: "/",
       active: location.pathname === "/"
     },
-    { 
-      name: "Histórico de Importações", 
-      icon: FileText, 
+    {
+      name: "Histórico de Importações",
+      icon: FileText,
       path: "/importacoes/historico",
       active: location.pathname === "/importacoes/historico"
     },
-    { 
-      name: "Sair", 
-      icon: LogOut, 
+    {
+      name: "Sair",
+      icon: LogOut,
       path: null,
-      active: false 
+      active: false
     },
   ];
+  const firstRender = React.useRef(true);
 
   // Fechar sidebar em telas menores quando a rota mudar
   useEffect(() => {
-    const handleRouteChange = () => {
-      if (window.innerWidth < 1024 && !isCollapsed) {
-        onToggle();
-      }
-    };
+    // Ignora a primeira execução para não fechar a sidebar ao carregar a página
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
 
-    handleRouteChange();
-  }, [location.pathname, isCollapsed, onToggle]);
-
+    // Fecha a sidebar se estiver aberta em mobile e a rota mudar
+    if (window.innerWidth < 1024 && !isCollapsed) {
+      onToggle();
+    }
+  }, [location.pathname]); // O hook agora só depende da mudança de rota
   const handleMenuClick = (item: typeof menuItems[0]) => {
     if (item.path) {
       navigate(item.path);
@@ -61,19 +65,19 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
     <>
       {/* Mobile overlay - só aparece quando sidebar está aberta em mobile */}
       {!isCollapsed && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
           onClick={onToggle}
         />
       )}
-      
+
       {/* Sidebar */}
       <div className={cn(
         "fixed left-0 top-0 z-30 h-screen bg-[#333] transition-all duration-300 ease-in-out",
         // Em mobile: escondida quando collapsed, visível quando não collapsed
         // Em desktop: sempre visível, mas com largura diferente
-        isCollapsed 
-          ? "lg:translate-x-0 lg:w-16 -translate-x-full" 
+        isCollapsed
+          ? "lg:translate-x-0 lg:w-16 -translate-x-full"
           : "translate-x-0 w-60",
         className
       )}>
@@ -114,7 +118,7 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
               title={isCollapsed ? item.name : undefined}
             >
               <item.icon className={cn(
-                "w-5 h-5 flex-shrink-0", 
+                "w-5 h-5 flex-shrink-0",
                 item.active ? "text-white" : "text-gray-400"
               )} />
               {!isCollapsed && (
