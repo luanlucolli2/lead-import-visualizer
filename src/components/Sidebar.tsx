@@ -39,6 +39,7 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
   const handleMenuClick = (item: typeof menuItems[0]) => {
     if (item.path) {
       navigate(item.path);
+      // Não fechar a sidebar automaticamente no desktop
     } else if (item.name === "Sair") {
       // Lógica de logout aqui
       console.log("Logout clicked");
@@ -61,7 +62,7 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
         isCollapsed ? "-translate-x-full lg:translate-x-0 lg:w-16" : "translate-x-0 w-60",
         className
       )}>
-        {/* Header with Hamburger and Logo */}
+        {/* Header com altura alinhada ao header principal */}
         <div className="p-4 border-b border-gray-600 flex items-center justify-between min-h-[73px]">
           <Button
             variant="ghost"
