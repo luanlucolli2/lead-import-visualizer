@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Sidebar } from "@/components/Sidebar";
-import { Header } from "@/components/Header";
 import { LeadsTable } from "@/components/LeadsTable";
+import { LeadsControls } from "@/components/LeadsControls";
 import { ImportModal } from "@/components/ImportModal";
 import { ExportModal } from "@/components/ExportModal";
 import { useToast } from "@/hooks/use-toast";
@@ -366,64 +365,52 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex w-full max-w-full overflow-x-hidden">
-      <Sidebar 
-        isCollapsed={sidebarCollapsed}
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
-      
-      <div className={`flex-1 transition-all duration-300 min-w-0 max-w-full ${
-        sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60'
-      }`}>
-        <Header
-          onImportClick={() => setIsImportModalOpen(true)}
-          onExportClick={() => setIsExportModalOpen(true)}
-          searchValue={searchValue}
-          onSearchChange={setSearchValue}
-          eligibleFilter={eligibleFilter}
-          onEligibleFilterChange={setEligibleFilter}
-          contractDateFromFilter={contractDateFromFilter}
-          onContractDateFromFilterChange={setContractDateFromFilter}
-          contractDateToFilter={contractDateToFilter}
-          onContractDateToFilterChange={setContractDateToFilter}
-          motivosFilter={motivosFilter}
-          onMotivosFilterChange={setMotivosFilter}
-          origemFilter={origemFilter}
-          onOrigemFilterChange={setOrigemFilter}
-          cpfMassFilter={cpfMassFilter}
-          onCpfMassFilterChange={setCpfMassFilter}
-          namesMassFilter={namesMassFilter}
-          onNamesMassFilterChange={setNamesMassFilter}
-          phonesMassFilter={phonesMassFilter}
-          onPhonesMassFilterChange={setPhonesMassFilter}
-          dateFromFilter={dateFromFilter}
-          onDateFromFilterChange={setDateFromFilter}
-          dateToFilter={dateToFilter}
-          onDateToFilterChange={setDateToFilter}
-          onApplyFilters={handleApplyFilters}
-          onClearFilters={handleClearFilters}
-          availableMotivos={availableMotivos}
-          availableOrigens={availableOrigens}
-          hasActiveFilters={hasActiveFilters}
-          onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
-        />
-        
-        <div className="p-4 lg:p-6 max-w-full min-w-0">
-          <div className="mb-6 max-w-full">
-            <h1 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2">Dashboard</h1>
-            <p className="text-gray-600 text-sm lg:text-base">
-              Gerencie e visualize seus leads importados ({filteredLeads.length} leads encontrados)
-            </p>
-          </div>
-
-          <LeadsTable
-            leads={paginatedLeads}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
+    <div className="p-4 lg:p-6 max-w-full min-w-0">
+      <div className="mb-6 max-w-full">
+        <h1 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2">Dashboard</h1>
+        <p className="text-gray-600 text-sm lg:text-base">
+          Gerencie e visualize seus leads importados ({filteredLeads.length} leads encontrados)
+        </p>
       </div>
+
+      <LeadsControls
+        onImportClick={() => setIsImportModalOpen(true)}
+        onExportClick={() => setIsExportModalOpen(true)}
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
+        eligibleFilter={eligibleFilter}
+        onEligibleFilterChange={setEligibleFilter}
+        contractDateFromFilter={contractDateFromFilter}
+        onContractDateFromFilterChange={setContractDateFromFilter}
+        contractDateToFilter={contractDateToFilter}
+        onContractDateToFilterChange={setContractDateToFilter}
+        motivosFilter={motivosFilter}
+        onMotivosFilterChange={setMotivosFilter}
+        origemFilter={origemFilter}
+        onOrigemFilterChange={setOrigemFilter}
+        cpfMassFilter={cpfMassFilter}
+        onCpfMassFilterChange={setCpfMassFilter}
+        namesMassFilter={namesMassFilter}
+        onNamesMassFilterChange={setNamesMassFilter}
+        phonesMassFilter={phonesMassFilter}
+        onPhonesMassFilterChange={setPhonesMassFilter}
+        dateFromFilter={dateFromFilter}
+        onDateFromFilterChange={setDateFromFilter}
+        dateToFilter={dateToFilter}
+        onDateToFilterChange={setDateToFilter}
+        onApplyFilters={handleApplyFilters}
+        onClearFilters={handleClearFilters}
+        availableMotivos={availableMotivos}
+        availableOrigens={availableOrigens}
+        hasActiveFilters={hasActiveFilters}
+      />
+
+      <LeadsTable
+        leads={paginatedLeads}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       <ImportModal
         isOpen={isImportModalOpen}

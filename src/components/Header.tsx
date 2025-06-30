@@ -1,196 +1,38 @@
 
-import { Search, Upload, Download, Filter, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { FiltersModal } from "./FiltersModal";
+import catarinenselogo from "../../public/catainenseLogo.png";
 
 interface HeaderProps {
-  onImportClick: () => void;
-  onExportClick: () => void;
-  searchValue: string;
-  onSearchChange: (value: string) => void;
-  eligibleFilter: "todos" | "elegiveis" | "nao-elegiveis";
-  onEligibleFilterChange: (value: "todos" | "elegiveis" | "nao-elegiveis") => void;
-  contractDateFromFilter: string;
-  onContractDateFromFilterChange: (value: string) => void;
-  contractDateToFilter: string;
-  onContractDateToFilterChange: (value: string) => void;
-  motivosFilter: string[];
-  onMotivosFilterChange: (values: string[]) => void;
-  origemFilter: string[];
-  onOrigemFilterChange: (values: string[]) => void;
-  cpfMassFilter: string;
-  onCpfMassFilterChange: (value: string) => void;
-  namesMassFilter: string;
-  onNamesMassFilterChange: (value: string) => void;
-  phonesMassFilter: string;
-  onPhonesMassFilterChange: (value: string) => void;
-  dateFromFilter: string;
-  onDateFromFilterChange: (value: string) => void;
-  dateToFilter: string;
-  onDateToFilterChange: (value: string) => void;
-  onApplyFilters: () => void;
-  onClearFilters: () => void;
-  availableMotivos: string[];
-  availableOrigens: string[];
-  hasActiveFilters: boolean;
   onToggleSidebar: () => void;
+  title?: string;
 }
 
-export const Header = ({
-  onImportClick,
-  onExportClick,
-  searchValue,
-  onSearchChange,
-  eligibleFilter,
-  onEligibleFilterChange,
-  contractDateFromFilter,
-  onContractDateFromFilterChange,
-  contractDateToFilter,
-  onContractDateToFilterChange,
-  motivosFilter,
-  onMotivosFilterChange,
-  origemFilter,
-  onOrigemFilterChange,
-  cpfMassFilter,
-  onCpfMassFilterChange,
-  namesMassFilter,
-  onNamesMassFilterChange,
-  phonesMassFilter,
-  onPhonesMassFilterChange,
-  dateFromFilter,
-  onDateFromFilterChange,
-  dateToFilter,
-  onDateToFilterChange,
-  onApplyFilters,
-  onClearFilters,
-  availableMotivos,
-  availableOrigens,
-  hasActiveFilters,
-  onToggleSidebar,
-}: HeaderProps) => {
-  const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
-
+export const Header = ({ onToggleSidebar, title = "Sistema de Leads" }: HeaderProps) => {
   return (
-    <div className="bg-white border-b border-gray-200 w-full max-w-full overflow-hidden">
-      <div className="px-3 sm:px-4 lg:px-6 py-4 max-w-full">
-        <div className="space-y-3 sm:space-y-4 max-w-full">
-          {/* Main Row - Sidebar Toggle, Search and Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-full justify-between">
-            {/* Sidebar Toggle Button (visible on mobile/tablet) */}
-            <Button
-              onClick={onToggleSidebar}
-              variant="outline"
-              size="sm"
-              className="lg:hidden flex items-center justify-center px-2 border-gray-300 hover:bg-gray-50 text-xs sm:text-sm flex-shrink-0 self-start"
-            >
-              <Menu className="w-4 h-4" />
-              <span className="ml-2">Menu</span>
-            </Button>
-
-            {/* Search Field */}
-            <div className="relative flex-1 min-w-0 max-w-full sm:max-w-xs lg:max-w-sm">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 flex-shrink-0" />
-              <Input
-                type="text"
-                placeholder="Pesquisar leads..."
-                value={searchValue}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-10 w-full min-w-0"
-              />
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-center gap-2 flex-shrink-0 min-w-0">
-              <Button 
-                onClick={() => setIsFiltersModalOpen(true)} 
-                variant="outline" 
-                size="sm"
-                className={cn(
-                  "flex items-center justify-center min-w-0 px-2 sm:px-3 border-gray-300 hover:bg-gray-50 relative text-xs sm:text-sm flex-shrink-0",
-                  hasActiveFilters && "border-blue-500 bg-blue-50 text-blue-700"
-                )}
-              >
-                <Filter className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                <span className="ml-1 sm:ml-2 hidden xs:inline whitespace-nowrap">Filtros</span>
-                {hasActiveFilters && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>
-                )}
-              </Button>
-              
-              <Button 
-                onClick={onExportClick} 
-                variant="outline" 
-                size="sm"
-                className="flex items-center justify-center min-w-0 px-2 sm:px-3 border-gray-300 hover:bg-gray-50 text-xs sm:text-sm flex-shrink-0"
-              >
-                <Download className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                <span className="ml-1 sm:ml-2 hidden xs:inline whitespace-nowrap">Exportar</span>
-              </Button>
-              
-              <Button 
-                onClick={onImportClick} 
-                size="sm"
-                className="flex items-center justify-center min-w-0 px-2 sm:px-3 bg-blue-600 hover:bg-blue-700 text-xs sm:text-sm flex-shrink-0"
-              >
-                <Upload className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                <span className="ml-1 sm:ml-2 hidden xs:inline whitespace-nowrap">Importar</span>
-              </Button>
-            </div>
+    <div className="bg-white border-b border-gray-200 w-full">
+      <div className="px-4 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button
+            onClick={onToggleSidebar}
+            variant="outline"
+            size="sm"
+            className="lg:hidden flex items-center justify-center px-2 border-gray-300 hover:bg-gray-50"
+          >
+            <Menu className="w-4 h-4" />
+            <span className="ml-2">Menu</span>
+          </Button>
+          
+          <div className="flex items-center gap-2">
+            <img
+              src={catarinenselogo}
+              alt="Logo Catarinense"
+              className="h-8 object-contain"
+            />
+            <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
           </div>
-
-          {/* Active Filters Indicator */}
-          {hasActiveFilters && (
-            <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-3 max-w-full min-w-0">
-              <div className="flex items-center space-x-2 min-w-0 flex-1">
-                <Filter className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                <span className="text-sm text-blue-800 font-medium truncate">Filtros ativos aplicados</span>
-              </div>
-              <Button
-                onClick={onClearFilters}
-                variant="outline"
-                size="sm"
-                className="text-xs border-blue-300 text-blue-700 hover:bg-blue-100 flex-shrink-0 ml-2 whitespace-nowrap"
-              >
-                Limpar
-              </Button>
-            </div>
-          )}
         </div>
       </div>
-
-      <FiltersModal
-        isOpen={isFiltersModalOpen}
-        onClose={() => setIsFiltersModalOpen(false)}
-        searchValue={searchValue}
-        onSearchChange={onSearchChange}
-        eligibleFilter={eligibleFilter}
-        onEligibleFilterChange={onEligibleFilterChange}
-        contractDateFromFilter={contractDateFromFilter}
-        onContractDateFromFilterChange={onContractDateFromFilterChange}
-        contractDateToFilter={contractDateToFilter}
-        onContractDateToFilterChange={onContractDateToFilterChange}
-        motivosFilter={motivosFilter}
-        onMotivosFilterChange={onMotivosFilterChange}
-        origemFilter={origemFilter}
-        onOrigemFilterChange={onOrigemFilterChange}
-        cpfMassFilter={cpfMassFilter}
-        onCpfMassFilterChange={onCpfMassFilterChange}
-        namesMassFilter={namesMassFilter}
-        onNamesMassFilterChange={onNamesMassFilterChange}
-        phonesMassFilter={phonesMassFilter}
-        onPhonesMassFilterChange={onPhonesMassFilterChange}
-        dateFromFilter={dateFromFilter}
-        onDateFromFilterChange={onDateFromFilterChange}
-        dateToFilter={dateToFilter}
-        onDateToFilterChange={onDateToFilterChange}
-        onApplyFilters={onApplyFilters}
-        onClearFilters={onClearFilters}
-        availableMotivos={availableMotivos}
-        availableOrigens={availableOrigens}
-      />
     </div>
   );
 };
