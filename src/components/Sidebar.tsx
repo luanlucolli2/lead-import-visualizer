@@ -39,22 +39,13 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
   const handleMenuClick = (item: typeof menuItems[0]) => {
     if (item.path) {
       navigate(item.path);
-      // Fechar a sidebar sempre em telas menores quando há navegação
-      if (window.innerWidth < 1024) {
-        // Usar um pequeno delay para garantir que a navegação aconteça primeiro
-        setTimeout(() => {
-          if (!isCollapsed) {
-            onToggle();
-          }
-        }, 100);
+      // Fechar a sidebar apenas no mobile após navegação
+      if (window.innerWidth < 1024 && !isCollapsed) {
+        onToggle();
       }
     } else if (item.name === "Sair") {
       // Lógica de logout aqui
       console.log("Logout clicked");
-      // Fechar sidebar também no logout em telas menores
-      if (window.innerWidth < 1024 && !isCollapsed) {
-        onToggle();
-      }
     }
   };
 

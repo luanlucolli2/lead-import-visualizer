@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -98,38 +97,31 @@ const HistoricoPage = () => {
 
   return (
     <AppLayout>
-      <div className="p-4 lg:p-6 max-w-full min-w-0">
-        <div className="mb-6 max-w-full">
-          <h1 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2">Histórico de Importações</h1>
-          <p className="text-gray-600 text-sm lg:text-base">
-            Visualize e gerencie o histórico de importações de leads
-          </p>
-        </div>
-
+      <div className="container mx-auto py-6 px-4">
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
               <FileText className="w-6 h-6 text-blue-600" />
               <div>
-                <CardTitle className="text-lg lg:text-xl">Lista de Importações</CardTitle>
-                <CardDescription className="text-sm lg:text-base">
-                  Todas as importações realizadas no sistema
+                <CardTitle className="text-2xl">Histórico de Importações</CardTitle>
+                <CardDescription>
+                  Visualize e gerencie o histórico de importações de leads
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="rounded-md border overflow-x-auto">
+            <div className="rounded-md border">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="min-w-[200px]">Arquivo Importado</TableHead>
-                    <TableHead className="min-w-[120px]">Tipo</TableHead>
-                    <TableHead className="min-w-[120px]">Status</TableHead>
-                    <TableHead className="min-w-[80px]">Erros</TableHead>
-                    <TableHead className="min-w-[160px]">Data</TableHead>
-                    <TableHead className="min-w-[150px]">Importado por</TableHead>
-                    <TableHead className="min-w-[120px]">Ações</TableHead>
+                    <TableHead>Arquivo Importado</TableHead>
+                    <TableHead>Tipo</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Erros</TableHead>
+                    <TableHead>Data</TableHead>
+                    <TableHead>Importado por</TableHead>
+                    <TableHead>Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -168,8 +160,7 @@ const HistoricoPage = () => {
                           className="flex items-center gap-2"
                         >
                           <Eye className="w-4 h-4" />
-                          <span className="hidden sm:inline">Ver Relatório</span>
-                          <span className="sm:hidden">Ver</span>
+                          Ver Relatório
                         </Button>
                       </TableCell>
                     </TableRow>
