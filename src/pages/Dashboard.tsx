@@ -1,269 +1,159 @@
-import { useState } from "react";
-import { Sidebar } from "@/components/Sidebar";
-import { Header } from "@/components/Header";
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Users, TrendingUp, AlertTriangle, CheckCircle, Search, Upload, Download, Filter } from "lucide-react";
 import { LeadsTable } from "@/components/LeadsTable";
 import { ImportModal } from "@/components/ImportModal";
 import { ExportModal } from "@/components/ExportModal";
-import { useToast } from "@/hooks/use-toast";
-
-// Mock data com origem e motivos padronizados
-const mockLeads = [
-  { 
-    id: "1", 
-    cpf: "123.456.789-01", 
-    nome: "Ana Silva Santos", 
-    telefone: "(11) 99999-1234", 
-    classe: "Quente" as const, 
-    status: "Elegível" as const, 
-    contratos: 3,
-    saldo: 25000.50,
-    libera: 18000.30,
-    dataAtualizacao: "15/12/2024",
-    motivo: "Aprovado",
-    origem: "Sistema Interno"
-  },
-  { 
-    id: "2", 
-    cpf: "987.654.321-02", 
-    nome: "Carlos Eduardo Lima", 
-    telefone: "(21) 98888-5678", 
-    classe: "Frio" as const, 
-    status: "Inelegível" as const, 
-    contratos: 1,
-    saldo: 8500.00,
-    libera: 0.00,
-    dataAtualizacao: "14/12/2024",
-    motivo: "Não autorizado",
-    origem: "Planilha Excel"
-  },
-  { 
-    id: "3", 
-    cpf: "456.789.123-03", 
-    nome: "Maria Fernanda Costa", 
-    telefone: "(11) 97777-9012", 
-    classe: "Quente" as const, 
-    status: "Elegível" as const, 
-    contratos: 5,
-    saldo: 42000.75,
-    libera: 35000.00,
-    dataAtualizacao: "16/12/2024",
-    motivo: "Aprovado",
-    origem: "API Externa"
-  },
-  { 
-    id: "4", 
-    cpf: "789.123.456-04", 
-    nome: "João Pedro Oliveira", 
-    telefone: "(85) 96666-3456", 
-    classe: "Frio" as const, 
-    status: "Elegível" as const, 
-    contratos: 2,
-    saldo: 15200.80,
-    libera: 12000.00,
-    dataAtualizacao: "13/12/2024",
-    motivo: "Aprovado",
-    origem: "Sistema Interno"
-  },
-  { 
-    id: "5", 
-    cpf: "321.654.987-05", 
-    nome: "Isabela Rodrigues", 
-    telefone: "(11) 95555-7890", 
-    classe: "Quente" as const, 
-    status: "Inelegível" as const, 
-    contratos: 1,
-    saldo: 5000.00,
-    libera: 0.00,
-    dataAtualizacao: "12/12/2024",
-    motivo: "Saldo insuficiente",
-    origem: "Planilha Excel"
-  },
-  { 
-    id: "6", 
-    cpf: "654.321.987-06", 
-    nome: "Rafael Mendes Silva", 
-    telefone: "(21) 94444-2345", 
-    classe: "Frio" as const, 
-    status: "Elegível" as const, 
-    contratos: 4,
-    saldo: 31500.25,
-    libera: 28000.50,
-    dataAtualizacao: "16/12/2024",
-    motivo: "Aprovado",
-    origem: "API Externa"
-  },
-  { 
-    id: "7", 
-    cpf: "147.258.369-07", 
-    nome: "Camila Santos Pereira", 
-    telefone: "(11) 93333-6789", 
-    classe: "Quente" as const, 
-    status: "Elegível" as const, 
-    contratos: 3,
-    saldo: 22000.40,
-    libera: 19500.00,
-    dataAtualizacao: "15/12/2024",
-    motivo: "Aprovado",
-    origem: "Sistema Interno"
-  },
-  { 
-    id: "8", 
-    cpf: "258.369.147-08", 
-    nome: "Gustavo Ferreira", 
-    telefone: "(85) 92222-0123", 
-    classe: "Frio" as const, 
-    status: "Inelegível" as const, 
-    contratos: 1,
-    saldo: 3200.00,
-    libera: 0.00,
-    dataAtualizacao: "11/12/2024",
-    motivo: "Não autorizado",
-    origem: "Planilha Excel"
-  },
-  { 
-    id: "9", 
-    cpf: "369.147.258-09", 
-    nome: "Larissa Almeida", 
-    telefone: "(21) 91111-4567", 
-    classe: "Quente" as const, 
-    status: "Elegível" as const, 
-    contratos: 6,
-    saldo: 58000.90,
-    libera: 52000.00,
-    dataAtualizacao: "17/12/2024",
-    motivo: "Aprovado",
-    origem: "API Externa"
-  },
-  { 
-    id: "10", 
-    cpf: "159.753.486-10", 
-    nome: "Bruno Costa Lima", 
-    telefone: "(11) 90000-8901", 
-    classe: "Frio" as const, 
-    status: "Inelegível" as const, 
-    contratos: 2,
-    saldo: 13800.60,
-    libera: 11000.20,
-    dataAtualizacao: "14/12/2024",
-    motivo: "Saldo insuficiente",
-    origem: "Sistema Interno"
-  },
-];
+import { FiltersModal } from "@/components/FiltersModal";
+import { LeadDetailsModal } from "@/components/LeadDetailsModal";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
+  const [leads, setLeads] = useState([]);
+  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
+  const [selectedLead, setSelectedLead] = useState(null);
   const [searchValue, setSearchValue] = useState("");
-  const [eligibleFilter, setEligibleFilter] = useState<"todos" | "elegiveis" | "nao-elegiveis">("todos");
+  const [eligibleFilter, setEligibleFilter] = useState("todos");
   const [contractDateFromFilter, setContractDateFromFilter] = useState("");
   const [contractDateToFilter, setContractDateToFilter] = useState("");
-  const [motivosFilter, setMotivosFilter] = useState<string[]>([]);
-  const [origemFilter, setOrigemFilter] = useState<string[]>([]);
+  const [motivosFilter, setMotivosFilter] = useState([]);
+  const [origemFilter, setOrigemFilter] = useState([]);
   const [cpfMassFilter, setCpfMassFilter] = useState("");
   const [namesMassFilter, setNamesMassFilter] = useState("");
   const [phonesMassFilter, setPhonesMassFilter] = useState("");
   const [dateFromFilter, setDateFromFilter] = useState("");
   const [dateToFilter, setDateToFilter] = useState("");
-  const [appliedCpfList, setAppliedCpfList] = useState<string[]>([]);
-  const [appliedNamesList, setAppliedNamesList] = useState<string[]>([]);
-  const [appliedPhonesList, setAppliedPhonesList] = useState<string[]>([]);
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
-  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const { toast } = useToast();
+  const [availableMotivos, setAvailableMotivos] = useState([]);
+  const [availableOrigens, setAvailableOrigens] = useState([]);
 
-  const leadsPerPage = 8;
+  useEffect(() => {
+    // Mock data - substituir por chamada real da API
+    const mockLeads = [
+      {
+        id: 1,
+        name: "João Silva",
+        cpf: "123.456.789-00",
+        phone: "(11) 99999-9999",
+        email: "joao@email.com",
+        eligible: true,
+        contractDate: "2024-01-15",
+        motivo: ["Documentação em ordem"],
+        origem: "Site",
+        createdAt: "2024-01-10"
+      },
+      {
+        id: 2,
+        name: "Maria Santos",
+        cpf: "987.654.321-00", 
+        phone: "(11) 88888-8888",
+        email: "maria@email.com",
+        eligible: false,
+        contractDate: "2024-01-20",
+        motivo: ["Renda insuficiente", "Score baixo"],
+        origem: "Telefone",
+        createdAt: "2024-01-12"
+      },
+      {
+        id: 3,
+        name: "Pedro Costa",
+        cpf: "456.789.123-00",
+        phone: "(11) 77777-7777", 
+        email: "pedro@email.com",
+        eligible: true,
+        contractDate: "2024-01-25",
+        motivo: ["Aprovado"],
+        origem: "Indicação",
+        createdAt: "2024-01-15"
+      }
+    ];
 
-  // Get unique motivos and origens for the filters
-  const availableMotivos = Array.from(new Set(mockLeads.map(lead => lead.motivo))).sort();
-  const availableOrigens = Array.from(new Set(mockLeads.map(lead => lead.origem))).sort();
+    setLeads(mockLeads);
+    setFilteredLeads(mockLeads);
+    
+    // Extract unique motivos and origens for filters
+    const motivos = [...new Set(mockLeads.flatMap(lead => lead.motivo))];
+    const origens = [...new Set(mockLeads.map(lead => lead.origem))];
+    setAvailableMotivos(motivos);
+    setAvailableOrigens(origens);
+  }, []);
 
-  // Parse text list (CPF, names, phones)
-  const parseTextList = (text: string, type: 'cpf' | 'name' | 'phone'): string[] => {
-    if (!text.trim()) return [];
-    
-    return text
-      .split(/[,;\n\r]+/)
-      .map(item => item.trim())
-      .filter(item => item.length > 0)
-      .map(item => {
-        if (type === 'cpf') {
-          // Normalize CPF format
-          const cleanCpf = item.replace(/[^\d]/g, '');
-          if (cleanCpf.length >= 11) {
-            return cleanCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-          }
-          return item;
-        }
-        return item;
-      })
-      .filter(item => item.length > 0);
-  };
+  const applyFilters = () => {
+    let filtered = [...leads];
 
-  // Convert date string to comparable format (YYYY-MM-DD to DD/MM/YYYY comparison)
-  const isDateInRange = (dateStr: string, fromDate: string, toDate: string): boolean => {
-    if (!fromDate && !toDate) return true;
-    
-    // Convert DD/MM/YYYY to YYYY-MM-DD for comparison
-    const [day, month, year] = dateStr.split('/');
-    const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    
-    if (fromDate && formattedDate < fromDate) return false;
-    if (toDate && formattedDate > toDate) return false;
-    
-    return true;
-  };
+    // Search filter
+    if (searchValue.trim()) {
+      const search = searchValue.toLowerCase();
+      filtered = filtered.filter(lead => 
+        lead.name.toLowerCase().includes(search) ||
+        lead.cpf.includes(search) ||
+        lead.phone.includes(search) ||
+        lead.email.toLowerCase().includes(search)
+      );
+    }
 
-  // Check if contract date is in range
-  const isContractDateInRange = (contratos: number, fromDate: string, toDate: string): boolean => {
-    if (!fromDate && !toDate) return true;
-    
-    // Para este exemplo, vamos assumir que quanto mais contratos, mais recente
-    // Em um cenário real, você teria uma data específica para cada contrato
-    const contractDate = new Date();
-    contractDate.setDate(contractDate.getDate() - (10 - contratos) * 30); // Simulação
-    
-    const contractDateStr = contractDate.toISOString().split('T')[0];
-    
-    if (fromDate && contractDateStr < fromDate) return false;
-    if (toDate && contractDateStr > toDate) return false;
-    
-    return true;
-  };
+    // Eligible filter
+    if (eligibleFilter !== "todos") {
+      const isEligible = eligibleFilter === "elegiveis";
+      filtered = filtered.filter(lead => lead.eligible === isEligible);
+    }
 
-  const handleApplyFilters = () => {
-    // Apply CPF filter
+    // Contract date filter
+    if (contractDateFromFilter) {
+      filtered = filtered.filter(lead => new Date(lead.contractDate) >= new Date(contractDateFromFilter));
+    }
+    if (contractDateToFilter) {
+      filtered = filtered.filter(lead => new Date(lead.contractDate) <= new Date(contractDateToFilter));
+    }
+
+    // Motivos filter
+    if (motivosFilter.length > 0) {
+      filtered = filtered.filter(lead => 
+        lead.motivo.some(motivo => motivosFilter.includes(motivo))
+      );
+    }
+
+    // Origem filter
+    if (origemFilter.length > 0) {
+      filtered = filtered.filter(lead => origemFilter.includes(lead.origem));
+    }
+
+    // CPF mass filter
     if (cpfMassFilter.trim()) {
-      const cpfList = parseTextList(cpfMassFilter, 'cpf');
-      setAppliedCpfList(cpfList);
-    } else {
-      setAppliedCpfList([]);
+      const cpfs = cpfMassFilter.split('\n').map(cpf => cpf.trim()).filter(cpf => cpf);
+      filtered = filtered.filter(lead => cpfs.includes(lead.cpf));
     }
 
-    // Apply Names filter
+    // Names mass filter
     if (namesMassFilter.trim()) {
-      const namesList = parseTextList(namesMassFilter, 'name');
-      setAppliedNamesList(namesList.map(name => name.toLowerCase()));
-    } else {
-      setAppliedNamesList([]);
+      const names = namesMassFilter.split('\n').map(name => name.trim().toLowerCase()).filter(name => name);
+      filtered = filtered.filter(lead => names.includes(lead.name.toLowerCase()));
     }
 
-    // Apply Phones filter
+    // Phones mass filter
     if (phonesMassFilter.trim()) {
-      const phonesList = parseTextList(phonesMassFilter, 'phone');
-      setAppliedPhonesList(phonesList);
-    } else {
-      setAppliedPhonesList([]);
+      const phones = phonesMassFilter.split('\n').map(phone => phone.trim()).filter(phone => phone);
+      filtered = filtered.filter(lead => phones.includes(lead.phone));
     }
 
-    setCurrentPage(1);
-    
-    toast({
-      title: "Filtros aplicados",
-      description: "Os filtros foram aplicados com sucesso",
-    });
+    // Date range filter
+    if (dateFromFilter) {
+      filtered = filtered.filter(lead => new Date(lead.createdAt) >= new Date(dateFromFilter));
+    }
+    if (dateToFilter) {
+      filtered = filtered.filter(lead => new Date(lead.createdAt) <= new Date(dateToFilter));
+    }
+
+    setFilteredLeads(filtered);
   };
 
-  const handleClearFilters = () => {
+  const clearFilters = () => {
     setSearchValue("");
     setEligibleFilter("todos");
     setContractDateFromFilter("");
@@ -275,166 +165,222 @@ const Dashboard = () => {
     setPhonesMassFilter("");
     setDateFromFilter("");
     setDateToFilter("");
-    setAppliedCpfList([]);
-    setAppliedNamesList([]);
-    setAppliedPhonesList([]);
-    setCurrentPage(1);
-    
-    toast({
-      title: "Filtros limpos",
-      description: "Todos os filtros foram removidos",
-    });
+    setFilteredLeads(leads);
   };
 
-  // Check if any filters are active
-  const hasActiveFilters = 
-    searchValue !== "" ||
-    eligibleFilter !== "todos" ||
-    contractDateFromFilter !== "" ||
-    contractDateToFilter !== "" ||
-    motivosFilter.length > 0 ||
-    origemFilter.length > 0 ||
-    appliedCpfList.length > 0 ||
-    appliedNamesList.length > 0 ||
-    appliedPhonesList.length > 0 ||
-    dateFromFilter !== "" ||
-    dateToFilter !== "";
+  const hasActiveFilters = searchValue || eligibleFilter !== "todos" || contractDateFromFilter || 
+    contractDateToFilter || motivosFilter.length > 0 || origemFilter.length > 0 || 
+    cpfMassFilter || namesMassFilter || phonesMassFilter || dateFromFilter || dateToFilter;
 
-  // Filter leads based on all filters
-  const filteredLeads = mockLeads.filter(lead => {
-    // Search filter
-    const matchesSearch = lead.nome.toLowerCase().includes(searchValue.toLowerCase()) ||
-                         lead.cpf.includes(searchValue) ||
-                         lead.telefone.includes(searchValue);
-    
-    // Eligibility filter
-    let matchesEligible = true;
-    if (eligibleFilter === "elegiveis") {
-      matchesEligible = lead.status === "Elegível";
-    } else if (eligibleFilter === "nao-elegiveis") {
-      matchesEligible = lead.status === "Inelegível";
-    }
-
-    // Motivos filter
-    const matchesMotivos = motivosFilter.length === 0 || motivosFilter.includes(lead.motivo);
-
-    // Origem filter
-    const matchesOrigem = origemFilter.length === 0 || origemFilter.includes(lead.origem);
-
-    // CPF mass filter
-    const matchesCpfMass = appliedCpfList.length === 0 || appliedCpfList.includes(lead.cpf);
-
-    // Names mass filter
-    const matchesNamesMass = appliedNamesList.length === 0 || 
-      appliedNamesList.some(name => lead.nome.toLowerCase().includes(name));
-
-    // Phones mass filter
-    const matchesPhonesMass = appliedPhonesList.length === 0 || 
-      appliedPhonesList.some(phone => lead.telefone.includes(phone.replace(/[^\d]/g, '')));
-
-    // Date range filter
-    const matchesDateRange = isDateInRange(lead.dataAtualizacao, dateFromFilter, dateToFilter);
-
-    // Contract date range filter
-    const matchesContractDateRange = isContractDateInRange(lead.contratos, contractDateFromFilter, contractDateToFilter);
-
-    return matchesSearch && matchesEligible && matchesContractDateRange && matchesMotivos && 
-           matchesOrigem && matchesCpfMass && matchesNamesMass && matchesPhonesMass && matchesDateRange;
-  });
-
-  // Pagination
-  const totalPages = Math.ceil(filteredLeads.length / leadsPerPage);
-  const paginatedLeads = filteredLeads.slice(
-    (currentPage - 1) * leadsPerPage,
-    currentPage * leadsPerPage
-  );
-
-  const handleImport = (type: string, file: File, origin?: string) => {
-    console.log(`Importing ${type} from file:`, file.name, origin ? `with origin: ${origin}` : '');
-    toast({
-      title: "Importação iniciada",
-      description: `Processando arquivo ${file.name} para ${type === 'cadastrais' ? 'Dados Cadastrais' : 'Dados de Higienização'}${origin ? ` (Origem: ${origin})` : ''}`,
-    });
-  };
-
-  const handleExport = (columns: string[]) => {
-    console.log("Exporting columns:", columns);
-    toast({
-      title: "Exportação iniciada",
-      description: `Gerando arquivo Excel com ${columns.length} colunas selecionadas`,
-    });
-  };
+  const eligibleLeads = leads.filter(lead => lead.eligible);
+  const nonEligibleLeads = leads.filter(lead => !lead.eligible);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex w-full max-w-full overflow-x-hidden">
-      <Sidebar 
-        isCollapsed={sidebarCollapsed}
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
-      
-      <div className={`flex-1 transition-all duration-300 min-w-0 max-w-full ${
-        sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60'
-      }`}>
-        <Header
-          onImportClick={() => setIsImportModalOpen(true)}
-          onExportClick={() => setIsExportModalOpen(true)}
-          searchValue={searchValue}
-          onSearchChange={setSearchValue}
-          eligibleFilter={eligibleFilter}
-          onEligibleFilterChange={setEligibleFilter}
-          contractDateFromFilter={contractDateFromFilter}
-          onContractDateFromFilterChange={setContractDateFromFilter}
-          contractDateToFilter={contractDateToFilter}
-          onContractDateToFilterChange={setContractDateToFilter}
-          motivosFilter={motivosFilter}
-          onMotivosFilterChange={setMotivosFilter}
-          origemFilter={origemFilter}
-          onOrigemFilterChange={setOrigemFilter}
-          cpfMassFilter={cpfMassFilter}
-          onCpfMassFilterChange={setCpfMassFilter}
-          namesMassFilter={namesMassFilter}
-          onNamesMassFilterChange={setNamesMassFilter}
-          phonesMassFilter={phonesMassFilter}
-          onPhonesMassFilterChange={setPhonesMassFilter}
-          dateFromFilter={dateFromFilter}
-          onDateFromFilterChange={setDateFromFilter}
-          dateToFilter={dateToFilter}
-          onDateToFilterChange={setDateToFilter}
-          onApplyFilters={handleApplyFilters}
-          onClearFilters={handleClearFilters}
-          availableMotivos={availableMotivos}
-          availableOrigens={availableOrigens}
-          hasActiveFilters={hasActiveFilters}
-          onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
-        />
-        
-        <div className="p-4 lg:p-6 max-w-full min-w-0">
-          <div className="mb-6 max-w-full">
-            <h1 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2">Dashboard</h1>
-            <p className="text-gray-600 text-sm lg:text-base">
-              Gerencie e visualize seus leads importados ({filteredLeads.length} leads encontrados)
-            </p>
-          </div>
+    <div className="flex flex-col min-h-screen">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 w-full">
+        <div className="px-3 sm:px-4 lg:px-6 py-4">
+          <div className="space-y-3 sm:space-y-4">
+            {/* Main Row - Sidebar Toggle, Search and Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 justify-between">
+              {/* Sidebar Toggle Button (visible on mobile/tablet) */}
+              <SidebarTrigger className="lg:hidden flex items-center justify-center px-2 border-gray-300 hover:bg-gray-50 text-xs sm:text-sm flex-shrink-0 self-start" />
 
-          <LeadsTable
-            leads={paginatedLeads}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
+              {/* Search Field */}
+              <div className="relative flex-1 min-w-0 max-w-full sm:max-w-xs lg:max-w-sm">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 flex-shrink-0" />
+                <Input
+                  type="text"
+                  placeholder="Pesquisar leads..."
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  className="pl-10 w-full min-w-0"
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2 flex-shrink-0 min-w-0">
+                <Button 
+                  onClick={() => setIsFiltersModalOpen(true)} 
+                  variant="outline" 
+                  size="sm"
+                  className={cn(
+                    "flex items-center justify-center min-w-0 px-2 sm:px-3 border-gray-300 hover:bg-gray-50 relative text-xs sm:text-sm flex-shrink-0",
+                    hasActiveFilters && "border-blue-500 bg-blue-50 text-blue-700"
+                  )}
+                >
+                  <Filter className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                  <span className="ml-1 sm:ml-2 hidden xs:inline whitespace-nowrap">Filtros</span>
+                  {hasActiveFilters && (
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>
+                  )}
+                </Button>
+                
+                <Button 
+                  onClick={() => setIsExportModalOpen(true)} 
+                  variant="outline" 
+                  size="sm"
+                  className="flex items-center justify-center min-w-0 px-2 sm:px-3 border-gray-300 hover:bg-gray-50 text-xs sm:text-sm flex-shrink-0"
+                >
+                  <Download className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                  <span className="ml-1 sm:ml-2 hidden xs:inline whitespace-nowrap">Exportar</span>
+                </Button>
+                
+                <Button 
+                  onClick={() => setIsImportModalOpen(true)} 
+                  size="sm"
+                  className="flex items-center justify-center min-w-0 px-2 sm:px-3 bg-blue-600 hover:bg-blue-700 text-xs sm:text-sm flex-shrink-0"
+                >
+                  <Upload className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                  <span className="ml-1 sm:ml-2 hidden xs:inline whitespace-nowrap">Importar</span>
+                </Button>
+              </div>
+            </div>
+
+            {/* Active Filters Indicator */}
+            {hasActiveFilters && (
+              <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-3 max-w-full min-w-0">
+                <div className="flex items-center space-x-2 min-w-0 flex-1">
+                  <Filter className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                  <span className="text-sm text-blue-800 font-medium truncate">Filtros ativos aplicados</span>
+                </div>
+                <Button
+                  onClick={clearFilters}
+                  variant="outline"
+                  size="sm"
+                  className="text-xs border-blue-300 text-blue-700 hover:bg-blue-100 flex-shrink-0 ml-2 whitespace-nowrap"
+                >
+                  Limpar
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      <ImportModal
-        isOpen={isImportModalOpen}
-        onClose={() => setIsImportModalOpen(false)}
-        onImport={handleImport}
+      {/* Main Content */}
+      <div className="flex-1 p-6 space-y-6">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total de Leads</CardTitle>
+              <Users className="w-4 h-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{leads.length}</div>
+              <p className="text-xs text-muted-foreground">
+                Total de leads no sistema
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Leads Elegíveis</CardTitle>
+              <CheckCircle className="w-4 h-4 text-green-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">{eligibleLeads.length}</div>
+              <p className="text-xs text-muted-foreground">
+                Leads aprovados para contrato
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Leads Não Elegíveis</CardTitle>
+              <AlertTriangle className="w-4 h-4 text-red-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-red-600">{nonEligibleLeads.length}</div>
+              <p className="text-xs text-muted-foreground">
+                Leads que não atendem critérios
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Taxa de Conversão</CardTitle>
+              <TrendingUp className="w-4 h-4 text-blue-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-blue-600">
+                {leads.length > 0 ? Math.round((eligibleLeads.length / leads.length) * 100) : 0}%
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Porcentagem de leads elegíveis
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Leads Table */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Leads</CardTitle>
+            <CardDescription>
+              Gerencie e visualize todos os leads do sistema
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <LeadsTable 
+              leads={filteredLeads} 
+              onLeadClick={setSelectedLead}
+              onApplyFilters={applyFilters}
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Modals */}
+      <ImportModal 
+        isOpen={isImportModalOpen} 
+        onClose={() => setIsImportModalOpen(false)} 
+      />
+      
+      <ExportModal 
+        isOpen={isExportModalOpen} 
+        onClose={() => setIsExportModalOpen(false)} 
       />
 
-      <ExportModal
-        isOpen={isExportModalOpen}
-        onClose={() => setIsExportModalOpen(false)}
-        onExport={handleExport}
+      <FiltersModal
+        isOpen={isFiltersModalOpen}
+        onClose={() => setIsFiltersModalOpen(false)}
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
+        eligibleFilter={eligibleFilter}
+        onEligibleFilterChange={setEligibleFilter}
+        contractDateFromFilter={contractDateFromFilter}
+        onContractDateFromFilterChange={setContractDateFromFilter}
+        contractDateToFilter={contractDateToFilter}
+        onContractDateToFilterChange={setContractDateToFilter}
+        motivosFilter={motivosFilter}
+        onMotivosFilterChange={setMotivosFilter}
+        origemFilter={origemFilter}
+        onOrigemFilterChange={setOrigemFilter}
+        cpfMassFilter={cpfMassFilter}
+        onCpfMassFilterChange={setCpfMassFilter}
+        namesMassFilter={namesMassFilter}
+        onNamesMassFilterChange={setNamesMassFilter}
+        phonesMassFilter={phonesMassFilter}
+        onPhonesMassFilterChange={setPhonesMassFilter}
+        dateFromFilter={dateFromFilter}
+        onDateFromFilterChange={setDateFromFilter}
+        dateToFilter={dateToFilter}
+        onDateToFilterChange={setDateToFilter}
+        onApplyFilters={applyFilters}
+        onClearFilters={clearFilters}
+        availableMotivos={availableMotivos}
+        availableOrigens={availableOrigens}
+      />
+
+      <LeadDetailsModal 
+        lead={selectedLead} 
+        isOpen={!!selectedLead} 
+        onClose={() => setSelectedLead(null)} 
       />
     </div>
   );
