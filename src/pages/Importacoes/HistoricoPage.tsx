@@ -96,7 +96,7 @@ const HistoricoPage = () => {
   };
 
   return (
-    <div className="container mx-auto py-6 px-4">
+    <div className="p-6">
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
