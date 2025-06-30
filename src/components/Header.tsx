@@ -56,7 +56,7 @@ export const Header = ({
   phonesMassFilter,
   onPhonesMassFilterChange,
   dateFromFilter,
-  onDateFromFilter,
+  onDateFromFilterChange,
   dateToFilter,
   onDateToFilterChange,
   onApplyFilters,
@@ -158,7 +158,7 @@ export const Header = ({
         cpfMassFilter={cpfMassFilter}
         onCpfMassFilterChange={onCpfMassFilterChange}
         namesMassFilter={namesMassFilter}
-        onNamesMassFilterChange={onNamesMassFilterChange}
+        onNamesMassFilterChange={onNamesMassFilter}
         phonesMassFilter={phonesMassFilter}
         onPhonesMassFilterChange={onPhonesMassFilterChange}
         dateFromFilter={dateFromFilter}
