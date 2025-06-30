@@ -59,7 +59,7 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
 
   return (
     <>
-      {/* Mobile overlay */}
+      {/* Mobile overlay - só aparece quando sidebar está aberta em mobile */}
       {!isCollapsed && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
@@ -70,7 +70,11 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
       {/* Sidebar */}
       <div className={cn(
         "fixed left-0 top-0 z-30 h-screen bg-[#333] transition-all duration-300 ease-in-out",
-        isCollapsed ? "-translate-x-full lg:translate-x-0 lg:w-16" : "translate-x-0 w-60",
+        // Em mobile: escondida quando collapsed, visível quando não collapsed
+        // Em desktop: sempre visível, mas com largura diferente
+        isCollapsed 
+          ? "lg:translate-x-0 lg:w-16 -translate-x-full" 
+          : "translate-x-0 w-60",
         className
       )}>
         {/* Header com altura alinhada ao header principal */}
