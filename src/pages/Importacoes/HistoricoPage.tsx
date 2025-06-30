@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { RelatorioErrosModal } from "@/components/modals/RelatorioErrosModal";
 import {
   mockImportJobs,
@@ -96,97 +96,113 @@ const HistoricoPage = () => {
   };
 
   return (
-    <div className="container mx-auto py-6 px-4">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <FileText className="w-6 h-6 text-blue-600" />
+    <div className="flex flex-col min-h-screen">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 w-full">
+        <div className="px-3 sm:px-4 lg:px-6 py-4">
+          <div className="flex items-center gap-4">
+            <SidebarTrigger className="lg:hidden" />
             <div>
-              <CardTitle className="text-2xl">Histórico de Importações</CardTitle>
-              <CardDescription>
-                Visualize e gerencie o histórico de importações de leads
-              </CardDescription>
+              <h1 className="text-2xl font-bold text-gray-900">Histórico de Importações</h1>
+              <p className="text-sm text-gray-600">Visualize e gerencie o histórico de importações de leads</p>
             </div>
           </div>
-        </CardHeader>
-        <CardContent>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Arquivo Importado</TableHead>
-                  <TableHead>Tipo</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Erros</TableHead>
-                  <TableHead>Data</TableHead>
-                  <TableHead>Importado por</TableHead>
-                  <TableHead>Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {jobs.map((job) => (
-                  <TableRow key={job.id}>
-                    <TableCell className="font-medium">
-                      {job.fileName}
-                    </TableCell>
-                    <TableCell>
-                      {getTypeBadge(job.type)}
-                    </TableCell>
-                    <TableCell>
-                      {getStatusBadge(job.status)}
-                    </TableCell>
-                    <TableCell>
-                      <span
-                        className={
-                          job.errorCount > 0
-                            ? "text-red-600 font-bold"
-                            : "text-gray-500"
-                        }
-                      >
-                        {job.errorCount}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-sm text-gray-600">
-                      {formatDate(job.finishedAt)}
-                    </TableCell>
-                    <TableCell>{job.user.name}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleViewReport(job)}
-                        disabled={job.status === 'Em Progresso' || loadingErrors}
-                        className="flex items-center gap-2"
-                      >
-                        <Eye className="w-4 h-4" />
-                        Ver Relatório
-                      </Button>
-                    </TableCell>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 p-6">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <FileText className="w-6 h-6 text-blue-600" />
+              <div>
+                <CardTitle className="text-2xl">Histórico de Importações</CardTitle>
+                <CardDescription>
+                  Visualize e gerencie o histórico de importações de leads
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Arquivo Importado</TableHead>
+                    <TableHead>Tipo</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Erros</TableHead>
+                    <TableHead>Data</TableHead>
+                    <TableHead>Importado por</TableHead>
+                    <TableHead>Ações</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-
-          {jobs.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Nenhuma importação encontrada</p>
+                </TableHeader>
+                <TableBody>
+                  {jobs.map((job) => (
+                    <TableRow key={job.id}>
+                      <TableCell className="font-medium">
+                        {job.fileName}
+                      </TableCell>
+                      <TableCell>
+                        {getTypeBadge(job.type)}
+                      </TableCell>
+                      <TableCell>
+                        {getStatusBadge(job.status)}
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={
+                            job.errorCount > 0
+                              ? "text-red-600 font-bold"
+                              : "text-gray-500"
+                          }
+                        >
+                          {job.errorCount}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-sm text-gray-600">
+                        {formatDate(job.finishedAt)}
+                      </TableCell>
+                      <TableCell>{job.user.name}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewReport(job)}
+                          disabled={job.status === 'Em Progresso' || loadingErrors}
+                          className="flex items-center gap-2"
+                        >
+                          <Eye className="w-4 h-4" />
+                          Ver Relatório
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
-          )}
-        </CardContent>
-      </Card>
 
-      <RelatorioErrosModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setSelectedJob(null);
-          setErrors([]);
-        }}
-        job={selectedJob}
-        errors={errors}
-      />
+            {jobs.length === 0 && (
+              <div className="text-center py-12 text-gray-500">
+                <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <p>Nenhuma importação encontrada</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <RelatorioErrosModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedJob(null);
+            setErrors([]);
+          }}
+          job={selectedJob}
+          errors={errors}
+        />
+      </div>
     </div>
   );
 };
