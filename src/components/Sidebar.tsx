@@ -3,6 +3,7 @@ import { Home, LogOut, Menu, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import catarinenselogo from "../../public/catainenseLogo.png";
 
 interface SidebarProps {
@@ -36,13 +37,20 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
     },
   ];
 
-  const handleMenuClick = (item: typeof menuItems[0]) => {
-    if (item.path) {
-      navigate(item.path);
-      // Fechar a sidebar apenas no mobile após navegação
+  // Fechar sidebar em telas menores quando a rota mudar
+  useEffect(() => {
+    const handleRouteChange = () => {
       if (window.innerWidth < 1024 && !isCollapsed) {
         onToggle();
       }
+    };
+
+    handleRouteChange();
+  }, [location.pathname, isCollapsed, onToggle]);
+
+  const handleMenuClick = (item: typeof menuItems[0]) => {
+    if (item.path) {
+      navigate(item.path);
     } else if (item.name === "Sair") {
       // Lógica de logout aqui
       console.log("Logout clicked");

@@ -62,7 +62,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
         </div>
 
         {/* Page Content */}
-        <div className="min-h-[calc(100vh-73px)]">
+        <div className="min-h-[calc(100vh-73px)] bg-gray-50">
           {children}
         </div>
       </div>
