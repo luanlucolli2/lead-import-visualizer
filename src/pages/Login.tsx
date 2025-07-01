@@ -51,7 +51,7 @@ const Login = () => {
         <CardHeader className="space-y-4 pb-6">
           {/* Logo Area */}
           <div className="text-center space-y-2">
-            <div className="flex justify-center mb-4">
+            <div className="flex justify-center mb-1">
               <img
                 src={catarinenselogo}
                 alt="Logo Catarinense"
