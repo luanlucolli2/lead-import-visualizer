@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import catarinenselogo from "../../public/catainenseLogo.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -45,20 +46,27 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-xl">
+    <div className="min-h-screen bg-[#333] flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-xl bg-[#333] border-gray-600">
         <CardHeader className="space-y-4 pb-8">
           {/* Logo Area */}
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold text-gray-900">Catarinense</h1>
-            <p className="text-sm text-gray-600">Soluções Financeiras</p>
+            <div className="flex justify-center mb-4">
+              <img
+                src={catarinenselogo}
+                alt="Logo Catarinense"
+                className="h-12 object-contain"
+              />
+            </div>
+            <h1 className="text-3xl font-bold text-white">Catarinense</h1>
+            <p className="text-sm text-gray-300">Soluções Financeiras</p>
           </div>
         </CardHeader>
         
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-gray-300">Email</Label>
               <Input
                 id="email"
                 name="email"
@@ -67,12 +75,12 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className="h-11"
+                className="h-11 bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Senha</Label>
+              <Label htmlFor="password" className="text-gray-300">Senha</Label>
               <Input
                 id="password"
                 name="password"
@@ -81,25 +89,25 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleInputChange}
                 required
-                className="h-11"
+                className="h-11 bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full h-11 text-base font-medium"
+              className="w-full h-11 text-base font-medium bg-green-700 hover:bg-green-600 text-white transition-colors duration-200"
               disabled={isLoading}
             >
               {isLoading ? "Entrando..." : "Entrar"}
             </Button>
           </form>
 
-          {/* Credenciais de teste (removível em produção) */}
-          <div className="mt-8 p-4 bg-gray-50 rounded-lg border">
-            <p className="text-xs text-gray-600 text-center font-medium">
+          {/* Credenciais de teste */}
+          <div className="mt-8 p-4 bg-gray-700 rounded-lg border border-gray-600">
+            <p className="text-xs text-gray-300 text-center font-medium">
               Credenciais de teste:
             </p>
-            <p className="text-xs text-gray-500 text-center mt-1">
+            <p className="text-xs text-gray-400 text-center mt-1">
               Email: admin@catarinense.com<br />
               Senha: 123456
             </p>
