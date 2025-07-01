@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
-import catarinenselogo from "../../public/catainenseLogo.png";
+import { Eye, EyeOff, Lock, Mail, Building2 } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -38,21 +37,13 @@ const Login = () => {
       // Login bem-sucedido
       localStorage.setItem("isAuthenticated", "true");
       toast.success("Login realizado com sucesso!", {
-        style: {
-          background: "#10b981",
-          color: "#ffffff",
-          border: "1px solid #059669"
-        }
+        description: "Redirecionando para o sistema..."
       });
       navigate("/");
     } else {
       // Login com falha
-      toast.error("Email ou senha inválidos.", {
-        style: {
-          background: "#ef4444",
-          color: "#ffffff",
-          border: "1px solid #dc2626"
-        }
+      toast.error("Credenciais inválidas", {
+        description: "Verifique seu email e senha e tente novamente."
       });
     }
 
@@ -60,119 +51,120 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-[#333] to-gray-800 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo Section */}
-        <div className="text-center mb-8">
-          <div className="bg-white rounded-full p-4 w-20 h-20 mx-auto mb-4 shadow-xl">
-            <img
-              src={catarinenselogo}
-              alt="Logo Catarinense"
-              className="w-full h-full object-contain"
-            />
+    <div className="min-h-screen bg-sidebar-background flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-sidebar-background via-sidebar-background to-sidebar-accent/20" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),transparent_50%)]" />
+      
+      <Card className="w-full max-w-md relative z-10 bg-white/95 backdrop-blur-sm border-sidebar-border shadow-2xl shadow-black/10">
+        <CardHeader className="space-y-6 pb-8 text-center">
+          {/* Logo e Branding */}
+          <div className="flex flex-col items-center space-y-4">
+            <div className="w-16 h-16 bg-sidebar-primary rounded-2xl flex items-center justify-center shadow-lg">
+              <Building2 className="w-8 h-8 text-sidebar-primary-foreground" />
+            </div>
+            
+            <div className="space-y-2">
+              <h1 className="text-2xl font-bold text-sidebar-foreground tracking-tight">
+                Catarinense
+              </h1>
+              <p className="text-sm text-sidebar-foreground/70 font-medium">
+                Soluções Financeiras
+              </p>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Catarinense</h1>
-          <p className="text-gray-300 text-sm">Soluções Financeiras</p>
-        </div>
 
-        {/* Login Card */}
-        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
-          <CardHeader className="space-y-1 pb-4">
-            <div className="text-center">
-              <h2 className="text-2xl font-semibold text-gray-900">Bem-vindo</h2>
-              <p className="text-gray-600 text-sm mt-1">Acesse sua conta para continuar</p>
-            </div>
-          </CardHeader>
-          
-          <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                  Email
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="Digite seu email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="pl-10 h-12 border-gray-200 focus:border-[#333] focus:ring-[#333] transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                  Senha
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                  <Input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Digite sua senha"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    required
-                    className="pl-10 pr-10 h-12 border-gray-200 focus:border-[#333] focus:ring-[#333] transition-colors"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                  </button>
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full h-12 text-base font-medium bg-[#333] hover:bg-gray-800 text-white transition-colors duration-200"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Entrando...
-                  </div>
-                ) : (
-                  "Entrar"
-                )}
-              </Button>
-            </form>
-
-            {/* Credenciais de teste */}
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <div className="text-center">
-                <p className="text-xs text-gray-600 font-medium mb-2">
-                  Credenciais de teste:
-                </p>
-                <div className="space-y-1">
-                  <p className="text-xs text-gray-500">
-                    <span className="font-medium">Email:</span> admin@catarinense.com
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    <span className="font-medium">Senha:</span> 123456
-                  </p>
-                </div>
+          <div className="space-y-1">
+            <h2 className="text-xl font-semibold text-sidebar-foreground">
+              Acesse sua conta
+            </h2>
+            <p className="text-sm text-sidebar-foreground/60">
+              Entre com suas credenciais para continuar
+            </p>
+          </div>
+        </CardHeader>
+        
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sidebar-foreground font-medium">
+                Email
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-sidebar-foreground/50" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="Digite seu email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="pl-10 h-12 bg-sidebar-background/50 border-sidebar-border focus:border-sidebar-primary focus:ring-sidebar-primary"
+                />
               </div>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Footer */}
-        <div className="text-center mt-8">
-          <p className="text-gray-400 text-xs">
-            © 2024 Catarinense. Todos os direitos reservados.
-          </p>
-        </div>
-      </div>
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-sidebar-foreground font-medium">
+                Senha
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-sidebar-foreground/50" />
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Digite sua senha"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  className="pl-10 pr-10 h-12 bg-sidebar-background/50 border-sidebar-border focus:border-sidebar-primary focus:ring-sidebar-primary"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-12 text-base font-semibold bg-sidebar-primary hover:bg-sidebar-primary/90 text-sidebar-primary-foreground shadow-lg transition-all duration-200 hover:shadow-xl"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-sidebar-primary-foreground/30 border-t-sidebar-primary-foreground rounded-full animate-spin" />
+                  Entrando...
+                </div>
+              ) : (
+                "Entrar no Sistema"
+              )}
+            </Button>
+          </form>
+
+          {/* Credenciais de teste */}
+          <div className="mt-8 p-4 bg-sidebar-accent/30 rounded-xl border border-sidebar-border/50">
+            <div className="text-center space-y-2">
+              <p className="text-xs font-semibold text-sidebar-foreground/80 uppercase tracking-wide">
+                Credenciais de Demonstração
+              </p>
+              <div className="text-xs text-sidebar-foreground/70 space-y-1">
+                <p><span className="font-medium">Email:</span> admin@catarinense.com</p>
+                <p><span className="font-medium">Senha:</span> 123456</p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
