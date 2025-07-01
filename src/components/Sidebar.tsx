@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import catarinenselogo from "../../public/catainenseLogo.png";
 import React from "react";
+import { toast } from "sonner";
 
 interface SidebarProps {
   className?: string;
@@ -52,12 +53,15 @@ const Sidebar = ({ className, isCollapsed, onToggle }: SidebarProps) => {
       onToggle();
     }
   }, [location.pathname]); // O hook agora só depende da mudança de rota
+  
   const handleMenuClick = (item: typeof menuItems[0]) => {
     if (item.path) {
       navigate(item.path);
     } else if (item.name === "Sair") {
-      // Lógica de logout aqui
-      console.log("Logout clicked");
+      // Lógica de logout
+      localStorage.removeItem("isAuthenticated");
+      toast.success("Logout realizado com sucesso!");
+      navigate("/login", { replace: true });
     }
   };
 

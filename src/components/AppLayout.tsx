@@ -49,7 +49,6 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
               </Button>
 
               <div className="flex items-center gap-2">
-
                 <h1 className="text-lg font-semibold text-gray-900">Sistema de Leads</h1>
               </div>
             </div>
