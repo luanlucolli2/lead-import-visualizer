@@ -48,18 +48,17 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-[#333] flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-xl bg-[#333] border-gray-600">
-        <CardHeader className="space-y-4 pb-8">
+        <CardHeader className="space-y-4 pb-6">
           {/* Logo Area */}
           <div className="text-center space-y-2">
             <div className="flex justify-center mb-4">
               <img
                 src={catarinenselogo}
                 alt="Logo Catarinense"
-                className="h-12 object-contain"
+                className="h-20 object-contain"
               />
             </div>
-            <h1 className="text-3xl font-bold text-white">Catarinense</h1>
-            <p className="text-sm text-gray-300">Soluções Financeiras</p>
+           
           </div>
         </CardHeader>
         
