@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Eye, EyeOff, Lock, Mail, Building2 } from "lucide-react";
+import catarinenselogo from "../../public/catainenseLogo.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,7 +15,6 @@ const Login = () => {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,132 +35,82 @@ const Login = () => {
     if (formData.email === "admin@catarinense.com" && formData.password === "123456") {
       // Login bem-sucedido
       localStorage.setItem("isAuthenticated", "true");
-      toast.success("Login realizado com sucesso!", {
-        description: "Redirecionando para o sistema..."
-      });
+      toast.success("Login realizado com sucesso!");
       navigate("/");
     } else {
       // Login com falha
-      toast.error("Credenciais inválidas", {
-        description: "Verifique seu email e senha e tente novamente."
-      });
+      toast.error("Email ou senha inválidos.");
     }
 
     setIsLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-sidebar-background flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-sidebar-background via-sidebar-background to-sidebar-accent/20" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),transparent_50%)]" />
-      
-      <Card className="w-full max-w-md relative z-10 bg-white/95 backdrop-blur-sm border-sidebar-border shadow-2xl shadow-black/10">
-        <CardHeader className="space-y-6 pb-8 text-center">
-          {/* Logo e Branding */}
-          <div className="flex flex-col items-center space-y-4">
-            <div className="w-16 h-16 bg-sidebar-primary rounded-2xl flex items-center justify-center shadow-lg">
-              <Building2 className="w-8 h-8 text-sidebar-primary-foreground" />
+    <div className="min-h-screen bg-[#333] flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-xl bg-[#333] border-gray-600">
+        <CardHeader className="space-y-4 pb-8">
+          {/* Logo Area */}
+          <div className="text-center space-y-2">
+            <div className="flex justify-center mb-4">
+              <img
+                src={catarinenselogo}
+                alt="Logo Catarinense"
+                className="h-12 object-contain"
+              />
             </div>
-            
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold text-sidebar-foreground tracking-tight">
-                Catarinense
-              </h1>
-              <p className="text-sm text-sidebar-foreground/70 font-medium">
-                Soluções Financeiras
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <h2 className="text-xl font-semibold text-sidebar-foreground">
-              Acesse sua conta
-            </h2>
-            <p className="text-sm text-sidebar-foreground/60">
-              Entre com suas credenciais para continuar
-            </p>
+            <h1 className="text-3xl font-bold text-white">Catarinense</h1>
+            <p className="text-sm text-gray-300">Soluções Financeiras</p>
           </div>
         </CardHeader>
         
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sidebar-foreground font-medium">
-                Email
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-sidebar-foreground/50" />
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Digite seu email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="pl-10 h-12 bg-sidebar-background/50 border-sidebar-border focus:border-sidebar-primary focus:ring-sidebar-primary"
-                />
-              </div>
+              <Label htmlFor="email" className="text-gray-300">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Digite seu email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                className="h-11 bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
+              />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sidebar-foreground font-medium">
-                Senha
-              </Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-sidebar-foreground/50" />
-                <Input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Digite sua senha"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  required
-                  className="pl-10 pr-10 h-12 bg-sidebar-background/50 border-sidebar-border focus:border-sidebar-primary focus:ring-sidebar-primary"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors"
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
+              <Label htmlFor="password" className="text-gray-300">Senha</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Digite sua senha"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                className="h-11 bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
+              />
             </div>
 
             <Button
               type="submit"
-              className="w-full h-12 text-base font-semibold bg-sidebar-primary hover:bg-sidebar-primary/90 text-sidebar-primary-foreground shadow-lg transition-all duration-200 hover:shadow-xl"
+              className="w-full h-11 text-base font-medium bg-green-700 hover:bg-green-600 text-white transition-colors duration-200"
               disabled={isLoading}
             >
-              {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-sidebar-primary-foreground/30 border-t-sidebar-primary-foreground rounded-full animate-spin" />
-                  Entrando...
-                </div>
-              ) : (
-                "Entrar no Sistema"
-              )}
+              {isLoading ? "Entrando..." : "Entrar"}
             </Button>
           </form>
 
           {/* Credenciais de teste */}
-          <div className="mt-8 p-4 bg-sidebar-accent/30 rounded-xl border border-sidebar-border/50">
-            <div className="text-center space-y-2">
-              <p className="text-xs font-semibold text-sidebar-foreground/80 uppercase tracking-wide">
-                Credenciais de Demonstração
-              </p>
-              <div className="text-xs text-sidebar-foreground/70 space-y-1">
-                <p><span className="font-medium">Email:</span> admin@catarinense.com</p>
-                <p><span className="font-medium">Senha:</span> 123456</p>
-              </div>
-            </div>
+          <div className="mt-8 p-4 bg-gray-700 rounded-lg border border-gray-600">
+            <p className="text-xs text-gray-300 text-center font-medium">
+              Credenciais de teste:
+            </p>
+            <p className="text-xs text-gray-400 text-center mt-1">
+              Email: admin@catarinense.com<br />
+              Senha: 123456
+            </p>
           </div>
         </CardContent>
       </Card>
