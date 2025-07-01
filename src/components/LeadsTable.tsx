@@ -130,7 +130,7 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">
                     <SortButton field="classe">Classe</SortButton>
                   </th>
-                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">
+                  <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[140px]">
                     <SortButton field="status">Status</SortButton>
                   </th>
                   <th className="px-3 xl:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">
@@ -156,16 +156,16 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
               <tbody className="bg-white divide-y divide-gray-200">
                 {sortedLeads.map((lead) => (
                   <tr key={lead.id} className="hover:bg-gray-50 transition-colors duration-150">
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 align-top">
                       {lead.cpf}
                     </td>
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium max-w-[200px] truncate">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium max-w-[200px] truncate align-top">
                       {lead.nome}
                     </td>
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono align-top">
                       {lead.telefone}
                     </td>
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap align-top">
                       <span
                         className={cn(
                           "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
@@ -177,11 +177,11 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                         {lead.classe}
                       </span>
                     </td>
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap align-top">
                       <div className="flex flex-col space-y-1">
                         <span
                           className={cn(
-                            "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
+                            "inline-flex px-2 py-1 text-xs font-semibold rounded-full w-fit",
                             lead.status === "Elegível"
                               ? "bg-green-100 text-green-800"
                               : "bg-gray-100 text-gray-800"
@@ -189,27 +189,27 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                         >
                           {lead.status}
                         </span>
-                        <span className="text-xs text-gray-500 truncate max-w-[100px]">{lead.motivo}</span>
+                        <span className="text-xs text-gray-500 truncate max-w-[120px]">{lead.motivo}</span>
                       </div>
                     </td>
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold align-top">
                       {formatCurrency(lead.saldo)}
                     </td>
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold align-top">
                       {formatCurrency(lead.libera)}
                     </td>
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 align-top">
                       {lead.dataAtualizacao}
                     </td>
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold align-top">
                       {lead.contratos}
                     </td>
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 align-top">
                       <span className="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full max-w-[100px] truncate">
                         {lead.origem}
                       </span>
                     </td>
-                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 xl:px-6 py-4 whitespace-nowrap align-top">
                       <Button
                         onClick={() => handleViewLead(lead)}
                         variant="outline"

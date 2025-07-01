@@ -142,27 +142,27 @@ const HistoricoPage = () => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {jobs.map((job) => (
                     <tr key={job.id} className="hover:bg-gray-50 transition-colors duration-150">
-                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium max-w-[200px] truncate">
+                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium max-w-[200px] truncate align-top">
                         {job.fileName}
                       </td>
-                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap align-top">
                         {getTypeBadge(job.type)}
                       </td>
-                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap align-top">
                         {getStatusBadge(job.status)}
                       </td>
-                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm font-semibold">
+                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm font-semibold align-top">
                         <span className={job.errorCount > 0 ? "text-red-600" : "text-gray-500"}>
                           {job.errorCount}
                         </span>
                       </td>
-                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-600 align-top">
                         {formatDate(job.finishedAt)}
                       </td>
-                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 align-top">
                         {job.user.name}
                       </td>
-                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 xl:px-6 py-4 whitespace-nowrap align-top">
                         <Button
                           variant="outline"
                           size="sm"
