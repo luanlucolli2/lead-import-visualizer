@@ -1,9 +1,11 @@
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { User, Phone, FileText, History, Calendar, DollarSign } from "lucide-react";
 import { Lead } from "@/types/lead";
@@ -38,15 +40,15 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden w-[95vw] p-4 sm:p-6">
-        <DialogHeader className="pb-2 sm:pb-4">
+      <DialogContent className="max-w-4xl w-[95vw] p-4 sm:p-6 max-h-[90vh] flex flex-col">
+        <DialogHeader className="pb-2 sm:pb-4 flex-shrink-0">
           <DialogTitle className="text-lg sm:text-xl font-semibold text-gray-900 flex items-center gap-2">
             <User className="h-5 w-5" />
             Detalhes do Lead
           </DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="dados" className="w-full flex flex-col">
+        <Tabs defaultValue="dados" className="flex flex-col flex-1 min-h-0">
           <div className="flex-shrink-0 -mx-4 sm:mx-0 px-4 sm:px-0">
             <TabsList className="w-full h-auto p-1 bg-muted/50 overflow-x-auto flex-nowrap">
               <div className="flex min-w-max gap-1 w-full sm:grid sm:grid-cols-4 sm:gap-0">
@@ -85,8 +87,8 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
           </div>
 
           <div className="flex-1 mt-4 sm:mt-6 min-h-0">
-            <div className="h-[calc(90vh-240px)] sm:h-[calc(90vh-260px)] overflow-y-auto">
-              <TabsContent value="dados" className="space-y-4 sm:space-y-6 mt-0 h-full">
+            <ScrollArea className="h-[60vh] sm:h-[65vh]">
+              <TabsContent value="dados" className="space-y-4 sm:space-y-6 mt-0 pr-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                   <Card>
                     <CardHeader className="pb-3 sm:pb-4">
@@ -186,8 +188,8 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
                 </Card>
               </TabsContent>
 
-              <TabsContent value="telefones" className="mt-0 h-full">
-                <Card className="h-full">
+              <TabsContent value="telefones" className="mt-0 pr-4">
+                <Card>
                   <CardHeader className="pb-3 sm:pb-4">
                     <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
                       <Phone className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -226,8 +228,8 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
                 </Card>
               </TabsContent>
 
-              <TabsContent value="contratos" className="mt-0 h-full">
-                <Card className="h-full">
+              <TabsContent value="contratos" className="mt-0 pr-4">
+                <Card>
                   <CardHeader className="pb-3 sm:pb-4">
                     <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
                       <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -264,8 +266,8 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
                 </Card>
               </TabsContent>
 
-              <TabsContent value="historico" className="mt-0 h-full">
-                <Card className="h-full">
+              <TabsContent value="historico" className="mt-0 pr-4">
+                <Card>
                   <CardHeader className="pb-3 sm:pb-4">
                     <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
                       <History className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -302,13 +304,13 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
                   </CardContent>
                 </Card>
               </TabsContent>
-            </div>
+            </ScrollArea>
           </div>
         </Tabs>
 
-        <Separator className="my-3 sm:my-4" />
+        <Separator className="my-3 sm:my-4 flex-shrink-0" />
         
-        <div className="flex justify-end">
+        <div className="flex justify-end flex-shrink-0">
           <Button onClick={onClose} variant="outline" className="text-sm">
             Fechar
           </Button>
