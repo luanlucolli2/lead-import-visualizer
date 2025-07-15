@@ -1,4 +1,3 @@
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -48,28 +47,45 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
         </DialogHeader>
 
         <Tabs defaultValue="dados" className="w-full flex flex-col">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-0 flex-shrink-0">
-            <TabsTrigger value="dados" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
-              <User className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden sm:inline">Dados Básicos</span>
-              <span className="sm:hidden">Dados</span>
-            </TabsTrigger>
-            <TabsTrigger value="telefones" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
-              <Phone className="h-3 w-3 sm:h-4 sm:w-4" />
-              Telefones
-            </TabsTrigger>
-            <TabsTrigger value="contratos" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
-              <FileText className="h-3 w-3 sm:h-4 sm:w-4" />
-              Contratos
-            </TabsTrigger>
-            <TabsTrigger value="historico" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
-              <History className="h-3 w-3 sm:h-4 sm:w-4" />
-              Histórico
-            </TabsTrigger>
-          </TabsList>
+          <div className="flex-shrink-0 -mx-4 sm:mx-0 px-4 sm:px-0">
+            <TabsList className="w-full h-auto p-1 bg-muted/50 overflow-x-auto flex-nowrap">
+              <div className="flex min-w-max gap-1 w-full sm:grid sm:grid-cols-4 sm:gap-0">
+                <TabsTrigger 
+                  value="dados" 
+                  className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-3 py-2 sm:px-3 whitespace-nowrap flex-shrink-0 min-w-fit data-[state=active]:bg-background"
+                >
+                  <User className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden xs:inline sm:hidden lg:inline">Dados Básicos</span>
+                  <span className="xs:hidden sm:inline lg:hidden">Dados</span>
+                  <span className="xs:hidden">•</span>
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="telefones" 
+                  className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-3 py-2 sm:px-3 whitespace-nowrap flex-shrink-0 min-w-fit data-[state=active]:bg-background"
+                >
+                  <Phone className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span>Telefones</span>
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="contratos" 
+                  className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-3 py-2 sm:px-3 whitespace-nowrap flex-shrink-0 min-w-fit data-[state=active]:bg-background"
+                >
+                  <FileText className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span>Contratos</span>
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="historico" 
+                  className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-3 py-2 sm:px-3 whitespace-nowrap flex-shrink-0 min-w-fit data-[state=active]:bg-background"
+                >
+                  <History className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span>Histórico</span>
+                </TabsTrigger>
+              </div>
+            </TabsList>
+          </div>
 
           <div className="flex-1 mt-4 sm:mt-6 min-h-0">
-            <div className="h-[calc(90vh-220px)] sm:h-[calc(90vh-260px)] overflow-y-auto">
+            <div className="h-[calc(90vh-240px)] sm:h-[calc(90vh-260px)] overflow-y-auto">
               <TabsContent value="dados" className="space-y-4 sm:space-y-6 mt-0 h-full">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                   <Card>
