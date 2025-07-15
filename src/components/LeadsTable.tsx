@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Eye, ChevronUp, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,6 +17,18 @@ interface Lead {
   dataAtualizacao: string;
   motivo: string;
   origem: string;
+  // Additional properties for LeadDetailsModal
+  dataNascimento?: string;
+  telefones?: Array<{
+    numero: string;
+    classe: "Quente" | "Frio";
+  }>;
+  tipoConsulta?: string;
+  historicoimports?: Array<{
+    tipo: string;
+    origem: string;
+    dataImportacao: string;
+  }>;
 }
 
 type SortField = 'nome' | 'cpf' | 'telefone' | 'classe' | 'status' | 'saldo' | 'libera' | 'dataAtualizacao' | 'contratos' | 'origem';
