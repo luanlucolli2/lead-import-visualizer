@@ -68,8 +68,9 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
             </TabsTrigger>
           </TabsList>
 
-          <div className="mt-4 sm:mt-6 max-h-[calc(90vh-160px)] sm:max-h-[calc(90vh-200px)] overflow-y-auto">
-            <TabsContent value="dados" className="space-y-4 sm:space-y-6 mt-0">
+          {/* Container com altura fixa para evitar mudanças de posição */}
+          <div className="mt-4 sm:mt-6 h-[calc(90vh-220px)] sm:h-[calc(90vh-240px)] overflow-y-auto">
+            <TabsContent value="dados" className="space-y-4 sm:space-y-6 mt-0 h-full">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 <Card>
                   <CardHeader className="pb-3 sm:pb-4">
@@ -169,7 +170,7 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
               </Card>
             </TabsContent>
 
-            <TabsContent value="telefones" className="space-y-4 mt-0">
+            <TabsContent value="telefones" className="space-y-4 mt-0 h-full">
               <Card>
                 <CardHeader className="pb-3 sm:pb-4">
                   <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
@@ -207,7 +208,7 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
               </Card>
             </TabsContent>
 
-            <TabsContent value="contratos" className="space-y-4 mt-0">
+            <TabsContent value="contratos" className="space-y-4 mt-0 h-full">
               <Card>
                 <CardHeader className="pb-3 sm:pb-4">
                   <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
@@ -243,7 +244,7 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
               </Card>
             </TabsContent>
 
-            <TabsContent value="historico" className="space-y-4 mt-0">
+            <TabsContent value="historico" className="space-y-4 mt-0 h-full">
               <Card>
                 <CardHeader className="pb-3 sm:pb-4">
                   <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
