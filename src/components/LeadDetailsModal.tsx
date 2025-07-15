@@ -47,8 +47,8 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
           </DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="dados" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-0">
+        <Tabs defaultValue="dados" className="w-full flex flex-col">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1 sm:gap-0 flex-shrink-0">
             <TabsTrigger value="dados" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
               <User className="h-3 w-3 sm:h-4 sm:w-4" />
               <span className="hidden sm:inline">Dados Básicos</span>
@@ -68,217 +68,225 @@ export const LeadDetailsModal = ({ isOpen, onClose, lead }: LeadDetailsModalProp
             </TabsTrigger>
           </TabsList>
 
-          <div className="mt-4 sm:mt-6 max-h-[calc(90vh-160px)] sm:max-h-[calc(90vh-200px)] overflow-y-auto">
-            <TabsContent value="dados" className="space-y-4 sm:space-y-6 mt-0">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div className="flex-1 mt-4 sm:mt-6 min-h-0">
+            <div className="h-[calc(90vh-220px)] sm:h-[calc(90vh-260px)] overflow-y-auto">
+              <TabsContent value="dados" className="space-y-4 sm:space-y-6 mt-0 h-full">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                  <Card>
+                    <CardHeader className="pb-3 sm:pb-4">
+                      <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
+                        <User className="h-4 w-4 sm:h-5 sm:w-5" />
+                        Informações Pessoais
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3 sm:space-y-4 pt-0">
+                      <div>
+                        <label className="text-xs sm:text-sm font-medium text-gray-600">Nome Completo</label>
+                        <p className="text-sm sm:text-base font-medium text-gray-900">{lead.nome}</p>
+                      </div>
+                      
+                      <div>
+                        <label className="text-xs sm:text-sm font-medium text-gray-600">CPF</label>
+                        <p className="text-sm sm:text-base font-mono text-gray-900">{formatCPF(lead.cpf)}</p>
+                      </div>
+                      
+                      <div>
+                        <label className="text-xs sm:text-sm font-medium text-gray-600">Data de Nascimento</label>
+                        <p className="text-sm sm:text-base text-gray-900">{lead.dataNascimento}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-3 sm:pb-4">
+                      <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
+                        <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
+                        Status e Classificação
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3 sm:space-y-4 pt-0">
+                      <div>
+                        <label className="text-xs sm:text-sm font-medium text-gray-600">Status</label>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge
+                            variant={lead.status === "Elegível" ? "default" : "secondary"}
+                            className={cn(
+                              "text-xs",
+                              lead.status === "Elegível"
+                                ? "bg-green-100 text-green-800 hover:bg-green-100"
+                                : "bg-red-100 text-red-800 hover:bg-red-100"
+                            )}
+                          >
+                            {lead.status}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="text-xs sm:text-sm font-medium text-gray-600">Tipo de Consulta</label>
+                        <p className="text-sm sm:text-base text-gray-900">{lead.tipoConsulta}</p>
+                      </div>
+                      
+                      <div>
+                        <label className="text-xs sm:text-sm font-medium text-gray-600">Classe</label>
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "text-xs",
+                            lead.classe === "Quente"
+                              ? "border-red-200 text-red-700 bg-red-50"
+                              : "border-blue-200 text-blue-700 bg-blue-50"
+                          )}
+                        >
+                          {lead.classe}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
                 <Card>
                   <CardHeader className="pb-3 sm:pb-4">
                     <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
-                      <User className="h-4 w-4 sm:h-5 sm:w-5" />
-                      Informações Pessoais
+                      <DollarSign className="h-4 w-4 sm:h-5 sm:w-5" />
+                      Informações Financeiras
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3 sm:space-y-4 pt-0">
-                    <div>
-                      <label className="text-xs sm:text-sm font-medium text-gray-600">Nome Completo</label>
-                      <p className="text-sm sm:text-base font-medium text-gray-900">{lead.nome}</p>
-                    </div>
-                    
-                    <div>
-                      <label className="text-xs sm:text-sm font-medium text-gray-600">CPF</label>
-                      <p className="text-sm sm:text-base font-mono text-gray-900">{formatCPF(lead.cpf)}</p>
-                    </div>
-                    
-                    <div>
-                      <label className="text-xs sm:text-sm font-medium text-gray-600">Data de Nascimento</label>
-                      <p className="text-sm sm:text-base text-gray-900">{lead.dataNascimento}</p>
+                  <CardContent className="pt-0">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                      <div className="bg-blue-50 p-3 sm:p-4 rounded-lg">
+                        <label className="text-xs sm:text-sm font-medium text-blue-700">Saldo Total</label>
+                        <p className="text-lg sm:text-2xl font-bold text-blue-900">{formatCurrency(lead.saldo)}</p>
+                        <p className="text-xs text-blue-600 mt-1">Valor total de FGTS retornado pelo robô</p>
+                      </div>
+                      
+                      <div className="bg-green-50 p-3 sm:p-4 rounded-lg">
+                        <label className="text-xs sm:text-sm font-medium text-green-700">Valor Liberado</label>
+                        <p className="text-lg sm:text-2xl font-bold text-green-900">{formatCurrency(lead.libera)}</p>
+                        <p className="text-xs text-green-600 mt-1">Valor disponível para liberação</p>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
 
-                <Card>
+              <TabsContent value="telefones" className="mt-0 h-full">
+                <Card className="h-full">
+                  <CardHeader className="pb-3 sm:pb-4">
+                    <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
+                      <Phone className="h-4 w-4 sm:h-5 sm:w-5" />
+                      Telefones de Contato
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    {lead.telefones && lead.telefones.length > 0 ? (
+                      <div className="grid grid-cols-1 gap-3 sm:gap-4">
+                        {lead.telefones.slice(0, 4).map((telefone, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                            <div className="flex-1 min-w-0">
+                              <p className="font-mono text-sm sm:text-base text-gray-900 truncate">{formatPhone(telefone.numero)}</p>
+                              <p className="text-xs sm:text-sm text-gray-600">Telefone {index + 1}</p>
+                            </div>
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                "text-xs ml-2 flex-shrink-0",
+                                telefone.classe === "Quente"
+                                  ? "border-red-200 text-red-700 bg-red-50"
+                                  : "border-blue-200 text-blue-700 bg-blue-50"
+                              )}
+                            >
+                              {telefone.classe}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center h-32">
+                        <p className="text-gray-600 text-center text-sm">Nenhum telefone cadastrado</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="contratos" className="mt-0 h-full">
+                <Card className="h-full">
                   <CardHeader className="pb-3 sm:pb-4">
                     <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
                       <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
-                      Status e Classificação
+                      Contratos
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3 sm:space-y-4 pt-0">
-                    <div>
-                      <label className="text-xs sm:text-sm font-medium text-gray-600">Status</label>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge
-                          variant={lead.status === "Elegível" ? "default" : "secondary"}
-                          className={cn(
-                            "text-xs",
-                            lead.status === "Elegível"
-                              ? "bg-green-100 text-green-800 hover:bg-green-100"
-                              : "bg-red-100 text-red-800 hover:bg-red-100"
-                          )}
-                        >
-                          {lead.status}
-                        </Badge>
+                  <CardContent className="pt-0">
+                    {lead.contratos && lead.contratos.length > 0 ? (
+                      <div className="space-y-3 sm:space-y-4">
+                        {lead.contratos.map((contrato, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 sm:p-4 border rounded-lg bg-gray-50">
+                            <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                              <div className="bg-primary/10 p-2 rounded-full flex-shrink-0">
+                                <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="font-medium text-sm sm:text-base text-gray-900">Contrato #{index + 1}</p>
+                                <p className="text-xs sm:text-sm text-gray-600 truncate">Data: {contrato.dataContrato}</p>
+                              </div>
+                            </div>
+                            <div className="text-right flex-shrink-0 ml-2">
+                              <p className="font-medium text-sm text-gray-900 truncate max-w-[100px] sm:max-w-none">{contrato.vendedor}</p>
+                              <p className="text-xs text-gray-600">Vendedor</p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    </div>
-                    
-                    <div>
-                      <label className="text-xs sm:text-sm font-medium text-gray-600">Tipo de Consulta</label>
-                      <p className="text-sm sm:text-base text-gray-900">{lead.tipoConsulta}</p>
-                    </div>
-                    
-                    <div>
-                      <label className="text-xs sm:text-sm font-medium text-gray-600">Classe</label>
-                      <Badge
-                        variant="outline"
-                        className={cn(
-                          "text-xs",
-                          lead.classe === "Quente"
-                            ? "border-red-200 text-red-700 bg-red-50"
-                            : "border-blue-200 text-blue-700 bg-blue-50"
-                        )}
-                      >
-                        {lead.classe}
-                      </Badge>
-                    </div>
+                    ) : (
+                      <div className="flex items-center justify-center h-32">
+                        <p className="text-gray-600 text-center text-sm">Nenhum contrato encontrado</p>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
-              </div>
+              </TabsContent>
 
-              <Card>
-                <CardHeader className="pb-3 sm:pb-4">
-                  <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 sm:h-5 sm:w-5" />
-                    Informações Financeiras
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                    <div className="bg-blue-50 p-3 sm:p-4 rounded-lg">
-                      <label className="text-xs sm:text-sm font-medium text-blue-700">Saldo Total</label>
-                      <p className="text-lg sm:text-2xl font-bold text-blue-900">{formatCurrency(lead.saldo)}</p>
-                      <p className="text-xs text-blue-600 mt-1">Valor total de FGTS retornado pelo robô</p>
-                    </div>
-                    
-                    <div className="bg-green-50 p-3 sm:p-4 rounded-lg">
-                      <label className="text-xs sm:text-sm font-medium text-green-700">Valor Liberado</label>
-                      <p className="text-lg sm:text-2xl font-bold text-green-900">{formatCurrency(lead.libera)}</p>
-                      <p className="text-xs text-green-600 mt-1">Valor disponível para liberação</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="telefones" className="space-y-4 mt-0">
-              <Card>
-                <CardHeader className="pb-3 sm:pb-4">
-                  <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
-                    <Phone className="h-4 w-4 sm:h-5 sm:w-5" />
-                    Telefones de Contato
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  {lead.telefones && lead.telefones.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-3 sm:gap-4">
-                      {lead.telefones.slice(0, 4).map((telefone, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                          <div className="flex-1 min-w-0">
-                            <p className="font-mono text-sm sm:text-base text-gray-900 truncate">{formatPhone(telefone.numero)}</p>
-                            <p className="text-xs sm:text-sm text-gray-600">Telefone {index + 1}</p>
-                          </div>
-                          <Badge
-                            variant="outline"
-                            className={cn(
-                              "text-xs ml-2 flex-shrink-0",
-                              telefone.classe === "Quente"
-                                ? "border-red-200 text-red-700 bg-red-50"
-                                : "border-blue-200 text-blue-700 bg-blue-50"
-                            )}
-                          >
-                            {telefone.classe}
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-600 text-center py-6 sm:py-8 text-sm">Nenhum telefone cadastrado</p>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="contratos" className="space-y-4 mt-0">
-              <Card>
-                <CardHeader className="pb-3 sm:pb-4">
-                  <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
-                    <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
-                    Contratos
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  {lead.contratos && lead.contratos.length > 0 ? (
-                    <div className="space-y-3 sm:space-y-4">
-                      {lead.contratos.map((contrato, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 sm:p-4 border rounded-lg bg-gray-50">
-                          <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                            <div className="bg-primary/10 p-2 rounded-full flex-shrink-0">
-                              <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+              <TabsContent value="historico" className="mt-0 h-full">
+                <Card className="h-full">
+                  <CardHeader className="pb-3 sm:pb-4">
+                    <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
+                      <History className="h-4 w-4 sm:h-5 sm:w-5" />
+                      Histórico de Importações
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    {lead.historicoimports && lead.historicoimports.length > 0 ? (
+                      <div className="space-y-3">
+                        {lead.historicoimports.map((importacao, index) => (
+                          <div key={index} className="flex items-center gap-3 sm:gap-4 p-3 border rounded-lg">
+                            <div className="bg-purple-100 p-2 rounded-full flex-shrink-0">
+                              <History className="h-3 w-3 sm:h-4 sm:w-4 text-purple-600" />
                             </div>
-                            <div className="min-w-0 flex-1">
-                              <p className="font-medium text-sm sm:text-base text-gray-900">Contrato #{index + 1}</p>
-                              <p className="text-xs sm:text-sm text-gray-600 truncate">Data: {contrato.dataContrato}</p>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <Badge variant="outline" className="text-xs">
+                                  {importacao.tipo}
+                                </Badge>
+                                <span className="text-xs sm:text-sm font-medium text-gray-900 truncate">{importacao.origem}</span>
+                              </div>
+                              <p className="text-xs text-gray-600 mt-1">
+                                {importacao.dataImportacao}
+                              </p>
                             </div>
                           </div>
-                          <div className="text-right flex-shrink-0 ml-2">
-                            <p className="font-medium text-sm text-gray-900 truncate max-w-[100px] sm:max-w-none">{contrato.vendedor}</p>
-                            <p className="text-xs text-gray-600">Vendedor</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-600 text-center py-6 sm:py-8 text-sm">Nenhum contrato encontrado</p>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="historico" className="space-y-4 mt-0">
-              <Card>
-                <CardHeader className="pb-3 sm:pb-4">
-                  <CardTitle className="text-base sm:text-lg font-medium flex items-center gap-2">
-                    <History className="h-4 w-4 sm:h-5 sm:w-5" />
-                    Histórico de Importações
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  {lead.historicoimports && lead.historicoimports.length > 0 ? (
-                    <div className="space-y-3">
-                      {lead.historicoimports.map((importacao, index) => (
-                        <div key={index} className="flex items-center gap-3 sm:gap-4 p-3 border rounded-lg">
-                          <div className="bg-purple-100 p-2 rounded-full flex-shrink-0">
-                            <History className="h-3 w-3 sm:h-4 sm:w-4 text-purple-600" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <Badge variant="outline" className="text-xs">
-                                {importacao.tipo}
-                              </Badge>
-                              <span className="text-xs sm:text-sm font-medium text-gray-900 truncate">{importacao.origem}</span>
-                            </div>
-                            <p className="text-xs text-gray-600 mt-1">
-                              {importacao.dataImportacao}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-600 text-center py-6 sm:py-8 text-sm">Nenhuma importação encontrada</p>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center h-32">
+                        <p className="text-gray-600 text-center text-sm">Nenhuma importação encontrada</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </div>
           </div>
         </Tabs>
 
