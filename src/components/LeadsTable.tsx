@@ -17,14 +17,14 @@ interface Lead {
   dataAtualizacao: string;
   motivo: string;
   origem: string;
-  // Additional properties for LeadDetailsModal
-  dataNascimento?: string;
-  telefones?: Array<{
+  // Required properties for LeadDetailsModal
+  dataNascimento: string;
+  telefones: Array<{
     numero: string;
     classe: "Quente" | "Frio";
   }>;
-  tipoConsulta?: string;
-  historicoimports?: Array<{
+  tipoConsulta: string;
+  historicoimports: Array<{
     tipo: string;
     origem: string;
     dataImportacao: string;
