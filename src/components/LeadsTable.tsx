@@ -1,35 +1,10 @@
+
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Eye, ChevronUp, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LeadDetailsModal } from "./LeadDetailsModal";
-
-interface Lead {
-  id: string;
-  cpf: string;
-  nome: string;
-  telefone: string;
-  classe: "Quente" | "Frio";
-  status: "Elegível" | "Inelegível";
-  contratos: number;
-  saldo: number;
-  libera: number;
-  dataAtualizacao: string;
-  motivo: string;
-  origem: string;
-  // Required properties for LeadDetailsModal
-  dataNascimento: string;
-  telefones: Array<{
-    numero: string;
-    classe: "Quente" | "Frio";
-  }>;
-  tipoConsulta: string;
-  historicoimports: Array<{
-    tipo: string;
-    origem: string;
-    dataImportacao: string;
-  }>;
-}
+import { Lead } from "@/types/lead";
 
 type SortField = 'nome' | 'cpf' | 'telefone' | 'classe' | 'status' | 'saldo' | 'libera' | 'dataAtualizacao' | 'contratos' | 'origem';
 type SortDirection = 'asc' | 'desc';
@@ -76,8 +51,16 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
   const sortedLeads = [...leads].sort((a, b) => {
     if (!sortField) return 0;
 
-    let aValue: any = a[sortField];
-    let bValue: any = b[sortField];
+    let aValue: any;
+    let bValue: any;
+
+    if (sortField === 'contratos') {
+      aValue = a.contratos.length;
+      bValue = b.contratos.length;
+    } else {
+      aValue = a[sortField];
+      bValue = b[sortField];
+    }
 
     // Handle date sorting
     if (sortField === 'dataAtualizacao') {
@@ -213,7 +196,7 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                       {lead.dataAtualizacao}
                     </td>
                     <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold align-top">
-                      {lead.contratos}
+                      {lead.contratos.length}
                     </td>
                     <td className="px-3 xl:px-6 py-4 whitespace-nowrap text-sm text-gray-900 align-top">
                       <span className="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full max-w-[100px] truncate">
@@ -287,7 +270,7 @@ export const LeadsTable = ({ leads, currentPage, totalPages, onPageChange }: Lea
                     {lead.origem}
                   </span>
                 </div>
-                <span className="text-xs text-gray-500 flex-shrink-0">{lead.contratos} contratos</span>
+                <span className="text-xs text-gray-500 flex-shrink-0">{lead.contratos.length} contratos</span>
               </div>
 
               {/* Financial Info */}

@@ -4,9 +4,10 @@ import { LeadsControls } from "@/components/LeadsControls";
 import { ImportModal } from "@/components/ImportModal";
 import { ExportModal } from "@/components/ExportModal";
 import { useToast } from "@/hooks/use-toast";
+import { Lead } from "@/types/lead";
 
 // Mock data com origem e motivos padronizados
-const mockLeads = [
+const mockLeads: Lead[] = [
   { 
     id: "1", 
     cpf: "123.456.789-01", 
@@ -14,12 +15,26 @@ const mockLeads = [
     telefone: "(11) 99999-1234", 
     classe: "Quente" as const, 
     status: "Elegível" as const, 
-    contratos: 3,
+    contratos: [
+      { dataContrato: "15/10/2024", vendedor: "João Silva" },
+      { dataContrato: "20/11/2024", vendedor: "Maria Costa" },
+      { dataContrato: "05/12/2024", vendedor: "Pedro Oliveira" }
+    ],
     saldo: 25000.50,
     libera: 18000.30,
     dataAtualizacao: "15/12/2024",
     motivo: "Aprovado",
-    origem: "Sistema Interno"
+    origem: "Sistema Interno",
+    dataNascimento: "15/03/1985",
+    telefones: [
+      { numero: "(11) 99999-1234", classe: "Quente" },
+      { numero: "(11) 98888-5678", classe: "Frio" }
+    ],
+    tipoConsulta: "FGTS",
+    historicoimports: [
+      { tipo: "Cadastrais", origem: "Sistema Interno", dataImportacao: "10/12/2024" },
+      { tipo: "Higienização", origem: "API Externa", dataImportacao: "12/12/2024" }
+    ]
   },
   { 
     id: "2", 
@@ -28,12 +43,22 @@ const mockLeads = [
     telefone: "(21) 98888-5678", 
     classe: "Frio" as const, 
     status: "Inelegível" as const, 
-    contratos: 1,
+    contratos: [
+      { dataContrato: "20/11/2024", vendedor: "Ana Santos" }
+    ],
     saldo: 8500.00,
     libera: 0.00,
     dataAtualizacao: "14/12/2024",
     motivo: "Não autorizado",
-    origem: "Planilha Excel"
+    origem: "Planilha Excel",
+    dataNascimento: "22/07/1978",
+    telefones: [
+      { numero: "(21) 98888-5678", classe: "Frio" }
+    ],
+    tipoConsulta: "FGTS",
+    historicoimports: [
+      { tipo: "Cadastrais", origem: "Planilha Excel", dataImportacao: "09/12/2024" }
+    ]
   },
   { 
     id: "3", 
@@ -42,12 +67,28 @@ const mockLeads = [
     telefone: "(11) 97777-9012", 
     classe: "Quente" as const, 
     status: "Elegível" as const, 
-    contratos: 5,
+    contratos: [
+      { dataContrato: "01/10/2024", vendedor: "Carlos Silva" },
+      { dataContrato: "15/10/2024", vendedor: "Ana Santos" },
+      { dataContrato: "25/11/2024", vendedor: "Pedro Lima" },
+      { dataContrato: "05/12/2024", vendedor: "Maria Costa" },
+      { dataContrato: "10/12/2024", vendedor: "João Oliveira" }
+    ],
     saldo: 42000.75,
     libera: 35000.00,
     dataAtualizacao: "16/12/2024",
     motivo: "Aprovado",
-    origem: "API Externa"
+    origem: "API Externa",
+    dataNascimento: "10/05/1990",
+    telefones: [
+      { numero: "(11) 97777-9012", classe: "Quente" },
+      { numero: "(11) 96666-8901", classe: "Quente" }
+    ],
+    tipoConsulta: "FGTS",
+    historicoimports: [
+      { tipo: "Cadastrais", origem: "API Externa", dataImportacao: "08/12/2024" },
+      { tipo: "Higienização", origem: "Sistema Interno", dataImportacao: "11/12/2024" }
+    ]
   },
   { 
     id: "4", 
@@ -56,12 +97,24 @@ const mockLeads = [
     telefone: "(85) 96666-3456", 
     classe: "Frio" as const, 
     status: "Elegível" as const, 
-    contratos: 2,
+    contratos: [
+      { dataContrato: "10/11/2024", vendedor: "Maria Santos" },
+      { dataContrato: "25/11/2024", vendedor: "Carlos Lima" }
+    ],
     saldo: 15200.80,
     libera: 12000.00,
     dataAtualizacao: "13/12/2024",
     motivo: "Aprovado",
-    origem: "Sistema Interno"
+    origem: "Sistema Interno",
+    dataNascimento: "08/12/1982",
+    telefones: [
+      { numero: "(85) 96666-3456", classe: "Frio" },
+      { numero: "(85) 95555-2345", classe: "Frio" }
+    ],
+    tipoConsulta: "FGTS",
+    historicoimports: [
+      { tipo: "Cadastrais", origem: "Sistema Interno", dataImportacao: "07/12/2024" }
+    ]
   },
   { 
     id: "5", 
@@ -70,12 +123,22 @@ const mockLeads = [
     telefone: "(11) 95555-7890", 
     classe: "Quente" as const, 
     status: "Inelegível" as const, 
-    contratos: 1,
+    contratos: [
+      { dataContrato: "30/11/2024", vendedor: "Pedro Costa" }
+    ],
     saldo: 5000.00,
     libera: 0.00,
     dataAtualizacao: "12/12/2024",
     motivo: "Saldo insuficiente",
-    origem: "Planilha Excel"
+    origem: "Planilha Excel",
+    dataNascimento: "25/09/1987",
+    telefones: [
+      { numero: "(11) 95555-7890", classe: "Quente" }
+    ],
+    tipoConsulta: "FGTS",
+    historicoimports: [
+      { tipo: "Cadastrais", origem: "Planilha Excel", dataImportacao: "06/12/2024" }
+    ]
   },
   { 
     id: "6", 
@@ -84,12 +147,27 @@ const mockLeads = [
     telefone: "(21) 94444-2345", 
     classe: "Frio" as const, 
     status: "Elegível" as const, 
-    contratos: 4,
+    contratos: [
+      { dataContrato: "05/10/2024", vendedor: "Ana Lima" },
+      { dataContrato: "20/10/2024", vendedor: "Carlos Santos" },
+      { dataContrato: "15/11/2024", vendedor: "Maria Silva" },
+      { dataContrato: "28/11/2024", vendedor: "João Costa" }
+    ],
     saldo: 31500.25,
     libera: 28000.50,
     dataAtualizacao: "16/12/2024",
     motivo: "Aprovado",
-    origem: "API Externa"
+    origem: "API Externa",
+    dataNascimento: "14/01/1980",
+    telefones: [
+      { numero: "(21) 94444-2345", classe: "Frio" },
+      { numero: "(21) 93333-1234", classe: "Frio" }
+    ],
+    tipoConsulta: "FGTS",
+    historicoimports: [
+      { tipo: "Cadastrais", origem: "API Externa", dataImportacao: "05/12/2024" },
+      { tipo: "Higienização", origem: "Sistema Interno", dataImportacao: "10/12/2024" }
+    ]
   },
   { 
     id: "7", 
@@ -98,12 +176,25 @@ const mockLeads = [
     telefone: "(11) 93333-6789", 
     classe: "Quente" as const, 
     status: "Elegível" as const, 
-    contratos: 3,
+    contratos: [
+      { dataContrato: "12/10/2024", vendedor: "Pedro Silva" },
+      { dataContrato: "18/11/2024", vendedor: "Maria Lima" },
+      { dataContrato: "02/12/2024", vendedor: "Carlos Costa" }
+    ],
     saldo: 22000.40,
     libera: 19500.00,
     dataAtualizacao: "15/12/2024",
     motivo: "Aprovado",
-    origem: "Sistema Interno"
+    origem: "Sistema Interno",
+    dataNascimento: "30/06/1992",
+    telefones: [
+      { numero: "(11) 93333-6789", classe: "Quente" },
+      { numero: "(11) 92222-5678", classe: "Frio" }
+    ],
+    tipoConsulta: "FGTS",
+    historicoimports: [
+      { tipo: "Cadastrais", origem: "Sistema Interno", dataImportacao: "04/12/2024" }
+    ]
   },
   { 
     id: "8", 
@@ -112,12 +203,22 @@ const mockLeads = [
     telefone: "(85) 92222-0123", 
     classe: "Frio" as const, 
     status: "Inelegível" as const, 
-    contratos: 1,
+    contratos: [
+      { dataContrato: "25/11/2024", vendedor: "Ana Costa" }
+    ],
     saldo: 3200.00,
     libera: 0.00,
     dataAtualizacao: "11/12/2024",
     motivo: "Não autorizado",
-    origem: "Planilha Excel"
+    origem: "Planilha Excel",
+    dataNascimento: "18/04/1975",
+    telefones: [
+      { numero: "(85) 92222-0123", classe: "Frio" }
+    ],
+    tipoConsulta: "FGTS",
+    historicoimports: [
+      { tipo: "Cadastrais", origem: "Planilha Excel", dataImportacao: "03/12/2024" }
+    ]
   },
   { 
     id: "9", 
@@ -126,12 +227,30 @@ const mockLeads = [
     telefone: "(21) 91111-4567", 
     classe: "Quente" as const, 
     status: "Elegível" as const, 
-    contratos: 6,
+    contratos: [
+      { dataContrato: "08/10/2024", vendedor: "João Silva" },
+      { dataContrato: "22/10/2024", vendedor: "Maria Santos" },
+      { dataContrato: "05/11/2024", vendedor: "Carlos Lima" },
+      { dataContrato: "20/11/2024", vendedor: "Ana Costa" },
+      { dataContrato: "01/12/2024", vendedor: "Pedro Silva" },
+      { dataContrato: "08/12/2024", vendedor: "Maria Lima" }
+    ],
     saldo: 58000.90,
     libera: 52000.00,
     dataAtualizacao: "17/12/2024",
     motivo: "Aprovado",
-    origem: "API Externa"
+    origem: "API Externa",
+    dataNascimento: "12/11/1988",
+    telefones: [
+      { numero: "(21) 91111-4567", classe: "Quente" },
+      { numero: "(21) 90000-3456", classe: "Quente" },
+      { numero: "(21) 89999-2345", classe: "Frio" }
+    ],
+    tipoConsulta: "FGTS",
+    historicoimports: [
+      { tipo: "Cadastrais", origem: "API Externa", dataImportacao: "02/12/2024" },
+      { tipo: "Higienização", origem: "Sistema Interno", dataImportacao: "08/12/2024" }
+    ]
   },
   { 
     id: "10", 
@@ -140,12 +259,24 @@ const mockLeads = [
     telefone: "(11) 90000-8901", 
     classe: "Frio" as const, 
     status: "Inelegível" as const, 
-    contratos: 2,
+    contratos: [
+      { dataContrato: "15/11/2024", vendedor: "Carlos Santos" },
+      { dataContrato: "28/11/2024", vendedor: "Maria Costa" }
+    ],
     saldo: 13800.60,
     libera: 11000.20,
     dataAtualizacao: "14/12/2024",
     motivo: "Saldo insuficiente",
-    origem: "Sistema Interno"
+    origem: "Sistema Interno",
+    dataNascimento: "05/02/1983",
+    telefones: [
+      { numero: "(11) 90000-8901", classe: "Frio" },
+      { numero: "(11) 89999-7890", classe: "Frio" }
+    ],
+    tipoConsulta: "FGTS",
+    historicoimports: [
+      { tipo: "Cadastrais", origem: "Sistema Interno", dataImportacao: "01/12/2024" }
+    ]
   },
 ];
 
@@ -213,20 +344,19 @@ const Dashboard = () => {
   };
 
   // Check if contract date is in range
-  const isContractDateInRange = (contratos: number, fromDate: string, toDate: string): boolean => {
+  const isContractDateInRange = (contratos: Array<{dataContrato: string; vendedor: string}>, fromDate: string, toDate: string): boolean => {
     if (!fromDate && !toDate) return true;
     
-    // Para este exemplo, vamos assumir que quanto mais contratos, mais recente
-    // Em um cenário real, você teria uma data específica para cada contrato
-    const contractDate = new Date();
-    contractDate.setDate(contractDate.getDate() - (10 - contratos) * 30); // Simulação
-    
-    const contractDateStr = contractDate.toISOString().split('T')[0];
-    
-    if (fromDate && contractDateStr < fromDate) return false;
-    if (toDate && contractDateStr > toDate) return false;
-    
-    return true;
+    // Check if any contract date is in range
+    return contratos.some(contrato => {
+      const [day, month, year] = contrato.dataContrato.split('/');
+      const contractDateStr = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      
+      if (fromDate && contractDateStr < fromDate) return false;
+      if (toDate && contractDateStr > toDate) return false;
+      
+      return true;
+    });
   };
 
   const handleApplyFilters = () => {

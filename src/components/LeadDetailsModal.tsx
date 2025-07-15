@@ -7,34 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { User, Phone, FileText, History, Calendar, DollarSign } from "lucide-react";
-
-interface Lead {
-  id: string;
-  cpf: string;
-  nome: string;
-  dataNascimento: string;
-  telefones: Array<{
-    numero: string;
-    classe: "Quente" | "Frio";
-  }>;
-  classe: "Quente" | "Frio";
-  status: "Elegível" | "Inelegível";
-  tipoConsulta: string;
-  contratos: Array<{
-    dataContrato: string;
-    vendedor: string;
-  }>;
-  saldo: number;
-  libera: number;
-  historicoimports: Array<{
-    tipo: string;
-    origem: string;
-    dataImportacao: string;
-  }>;
-  dataAtualizacao: string;
-  motivo: string;
-  origem: string;
-}
+import { Lead } from "@/types/lead";
 
 interface LeadDetailsModalProps {
   isOpen: boolean;
